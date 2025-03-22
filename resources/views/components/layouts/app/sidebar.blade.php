@@ -1,3 +1,24 @@
+
+@php
+    $groups = [
+        'Control' => [
+            [
+                'name' => 'Control de  asistencias',
+                'icon' => 'book-open',
+                'url'  => route('dashboard'),
+                'current' => request()->routeIs('dashboard')
+            ],
+            [
+                'name' => 'asistencias',
+                'icon' => 'book-open',
+                'url'  => route('interns.index'),
+                'current' => request()->routeIs('interns.index')
+            ],
+        ]
+    ];
+@endphp
+
+
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="dark">
     <head>
@@ -12,22 +33,28 @@
             </a>
 
             <flux:navlist variant="outline">
-                <flux:navlist.group :heading="__('Platform')" class="grid">
-                    <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
-                </flux:navlist.group>
+
+            @foreach($groups as $group => $links)
+            <flux:navlist.group :heading="$group" class="grid">
+                @foreach($links as $link)
+                    <flux:navlist.item 
+                        :icon="$link['icon'] ?? 'default-icon'" 
+                        :href="$link['url'] ?? '#'" 
+                        :current="$link['current'] ?? false" 
+                        wire:navigate>
+                        {{ $link['name'] ?? 'Sin nombre' }}
+                    </flux:navlist.item>
+                @endforeach
+                
+            </flux:navlist.group>
+        @endforeach
+        
+        
             </flux:navlist>
 
             <flux:spacer />
 
-            <flux:navlist variant="outline">
-                <flux:navlist.item icon="folder-git-2" href="https://github.com/laravel/livewire-starter-kit" target="_blank">
-                {{ __('Repository') }}
-                </flux:navlist.item>
-
-                <flux:navlist.item icon="book-open-text" href="https://laravel.com/docs/starter-kits" target="_blank">
-                {{ __('Documentation') }}
-                </flux:navlist.item>
-            </flux:navlist>
+            
 
             <!-- Desktop User Menu -->
             <flux:dropdown position="bottom" align="start">

@@ -13,9 +13,20 @@ return new class extends Migration
     {
         Schema::create('interns', function (Blueprint $table) {
             $table->id();
+            
+            $table->string('name');
+            $table->string('lastname');
+            $table->string('dni', 8)->unique();
+            $table->string('phone', 9)->nullable();
+            $table->time('arrival_time'); // Hora de entrada establecida
+            $table->time('departure_time'); // Hora de salida establecida
+            $table->date('start_date'); // Inicio de prácticas
+            $table->date('end_date'); // Fin de prácticas
+            $table->string('institution')->nullable(); // Institución de procedencia
             $table->timestamps();
         });
     }
+    
 
     /**
      * Reverse the migrations.

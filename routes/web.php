@@ -22,4 +22,7 @@ Route::middleware(['auth'])->group(function () {
 
 Route::resource('interns', InternController::class);
 
+
+
+
 require __DIR__.'/auth.php';

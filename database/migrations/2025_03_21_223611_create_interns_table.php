@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('lastname');
             $table->string('dni', 8)->unique();
             $table->string('phone', 9)->nullable();
-            $table->time('arrival_time'); // Hora de entrada establecida
+            $table->time('arrival_time')->nullable();
             $table->time('departure_time'); // Hora de salida establecida
             $table->date('start_date'); // Inicio de prácticas
             $table->date('end_date'); // Fin de prácticas

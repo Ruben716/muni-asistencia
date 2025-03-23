@@ -29,34 +29,28 @@ class InternController extends Controller
      * Guarda un nuevo practicante en la base de datos.
      */
     public function store(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
-            'dni' => 'required|string|size:8|unique:interns,dni',
-            'phone' => 'nullable|string|size:9',
-            'arrival_time' => 'required|date_format:H:i',
-            'departure_time' => 'required|date_format:H:i|after:arrival_time',
-            'start_date' => 'required|date',
-            'end_date' => 'required|date|after:start_date',
-            'institution' => 'nullable|string|max:255',
-        ]);
+{
+    $validated = $request->validate([
+        'name' => 'required|string|max:255',
+        'lastname' => 'required|string|max:255',
+        'dni' => 'required|string|size:8|unique:interns,dni',
+        'phone' => 'nullable|string|size:9',
+        'arrival_time' => 'required|date_format:H:i',
+        'departure_time' => 'required|date_format:H:i|after:arrival_time',
+        'start_date' => 'required|date',
+        'end_date' => 'required|date|after:start_date',
+        'institution' => 'nullable|string|max:255',
+    ]);
 
-        Intern::create([
-            'user_id' => Auth::id(),
-            'name' => $request->name,
-            'last_name' => $request->last_name,
-            'dni' => $request->dni,
-            'phone' => $request->phone,
-            'arrival_time' => $request->arrival_time,
-            'departure_time' => $request->departure_time,
-            'start_date' => $request->start_date,
-            'end_date' => $request->end_date,
-            'institution' => $request->institution,
-        ]);
+    // Ya no intentamos asignar user_id
+    $intern = Intern::create($validated);
 
-        return redirect()->route('interns.index')->with('success', 'Practicante registrado correctamente.');
+    if ($intern) {
+        return redirect()->route('interns.index')->with('success', 'Practicante registrado correctamente');
+    } else {
+        return back()->with('error', 'Error al registrar el practicante');
     }
+}
 
     /**
      * Muestra los detalles de un practicante.
@@ -78,23 +72,22 @@ class InternController extends Controller
      * Actualiza la información del practicante en la base de datos.
      */
     public function update(Request $request, Intern $intern)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
-            'dni' => "required|string|size:8|unique:interns,dni,{$intern->id}",
-            'phone' => 'nullable|string|size:9',
-            'arrival_time' => 'required|date_format:H:i',
-            'departure_time' => 'required|date_format:H:i|after:arrival_time',
-            'start_date' => 'required|date',
-            'end_date' => 'required|date|after:start_date',
-            'institution' => 'nullable|string|max:255',
-        ]);
+{
+    $intern->name = $request->name;
+    $intern->lastname = $request->lastname;
+    $intern->dni = $request->dni;
+    $intern->phone = $request->phone;
+    $intern->arrival_time = $request->arrival_time;
+    $intern->departure_time = $request->departure_time;
+    $intern->start_date = $request->start_date;
+    $intern->end_date = $request->end_date;
+    $intern->institution = $request->institution;
 
-        $intern->update($request->all());
+    $intern->save(); // 💾 Guardar manualmente
 
-        return redirect()->route('interns.index')->with('success', 'Practicante actualizado correctamente.');
-    }
+    return redirect()->route('interns.index')->with('success', 'Practicante actualizado');
+}
+
 
     /**
      * Elimina un practicante de la base de datos.

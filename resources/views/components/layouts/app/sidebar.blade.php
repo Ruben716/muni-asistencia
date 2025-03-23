@@ -9,10 +9,16 @@
                 'current' => request()->routeIs('dashboard')
             ],
             [
-                'name' => 'asistencias',
+                'name' => 'Practicantes',
                 'icon' => 'book-open',
                 'url'  => route('interns.index'),
                 'current' => request()->routeIs('interns.index')
+            ],
+            [
+                'name' => 'Registra tu asistencia',
+                'icon' => 'book-open',
+                'url'  => route('attendances.index'),
+                'current' => request()->routeIs('attendances.index')
             ],
         ]
     ];

@@ -14,7 +14,12 @@ class AttendanceController extends Controller
      */
     public function index()
     {
-        $attendances = Attendance::with('intern')->orderBy('date', 'desc')->get();
+        // Muestra las asistencias del día de hoy
+        $attendances = Attendance::with('intern')
+            ->whereDate('date', Carbon::today())
+            ->orderBy('created_at', 'desc')
+            ->get();
+        
         return view('admin.attendances.index', compact('attendances'));
     }
 
@@ -27,54 +32,44 @@ class AttendanceController extends Controller
     }
 
     /**
-     * Registra la asistencia.
+     * Registra la asistencia (entrada o salida).
      */
     public function store(Request $request)
     {
+        // Validación del DNI
         $request->validate([
-            'dni' => 'required|numeric|digits:8',
-            'type' => 'required|in:check_in,check_out', // 'check_in' para entrada, 'check_out' para salida
+            'dni' => 'required|numeric|digits:8|exists:interns,dni', // Validar que el DNI esté registrado
+        ], [
+            'dni.exists' => 'DNI no encontrado en el sistema.'
         ]);
 
+        // Buscar al practicante por su DNI
         $intern = Intern::where('dni', $request->dni)->first();
+        $today = Carbon::today()->toDateString(); // Fecha actual
+        $now = Carbon::now()->toTimeString(); // Hora actual
 
-        if (!$intern) {
-            return back()->withErrors(['dni' => 'DNI no encontrado']);
-        }
+        // Buscar si ya existe un registro de asistencia para el practicante hoy
+        $attendance = Attendance::where('intern_id', $intern->id)
+                                ->where('date', $today)
+                                ->first();
 
-        $today = Carbon::now()->toDateString();
-        $now = Carbon::now()->toTimeString();
-
-        $attendance = Attendance::where('intern_id', $intern->id)->where('date', $today)->first();
-
-        if ($request->type === 'check_in') {
-            if ($attendance) {
-                return back()->withErrors(['dni' => 'Ya registraste tu ingreso hoy']);
-            }
-
+        if (!$attendance) {
+            // Si no existe un registro de entrada para hoy, registrar la entrada (check_in)
             Attendance::create([
                 'intern_id' => $intern->id,
                 'date' => $today,
                 'check_in' => $now,
             ]);
-
-            return back()->with('success', 'Ingreso registrado correctamente');
-        }
-
-        if ($request->type === 'check_out') {
-            if (!$attendance) {
-                return back()->withErrors(['dni' => 'No puedes registrar salida sin haber ingresado']);
-            }
-
-            if ($attendance->check_out) {
-                return back()->withErrors(['dni' => 'Ya registraste tu salida hoy']);
-            }
-
+            return back()->with('success', 'Entrada registrada correctamente');
+        } elseif (!$attendance->check_out) {
+            // Si ya existe un registro pero no se ha registrado la salida (check_out), registrar la salida
             $attendance->update([
                 'check_out' => $now,
             ]);
-
             return back()->with('success', 'Salida registrada correctamente');
+        } else {
+            // Si ya se registró entrada y salida, mostrar un error
+            return back()->withErrors(['dni' => 'Ya registraste entrada y salida hoy.']);
         }
     }
 }

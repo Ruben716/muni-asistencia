@@ -65,7 +65,8 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'America/Lima',  // O la zona horaria que corresponda a tu ubicación
+
 
     /*
     |--------------------------------------------------------------------------

@@ -21,7 +21,7 @@ Route::middleware(['auth'])->group(function () {
     Volt::route('settings/appearance', 'settings.appearance')->name('settings.appearance');
 });
 
-Route::resource('interns', InternController::class);
+Route::resource('interns', InternController::class)->middleware('auth');;
 
 
 Route::resource('attendances', AttendanceController::class)->middleware('auth');

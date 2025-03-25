@@ -51,7 +51,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
             autofocus
             autocomplete="name"
             :placeholder="__('Full name')"
-        />
+        />  
 
         <!-- Email Address -->
         <flux:input

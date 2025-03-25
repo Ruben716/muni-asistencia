@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 class InternController extends Controller
 {
     /**
-     * Muestra la lista de practicantes.
+     * 
      */
     public function index()
     {
@@ -18,16 +18,12 @@ class InternController extends Controller
     }
 
     /**
-     * Muestra el formulario para registrar un nuevo practicante.
      */
     public function create()
     {
         return view('admin.interns.create');
     }
 
-    /**
-     * Guarda un nuevo practicante en la base de datos.
-     */
     public function store(Request $request)
 {
     $validated = $request->validate([
@@ -41,8 +37,6 @@ class InternController extends Controller
         'end_date' => 'required|date|after:start_date',
         'institution' => 'nullable|string|max:255',
     ]);
-
-    // Ya no intentamos asignar user_id
     $intern = Intern::create($validated);
 
     if ($intern) {
@@ -51,17 +45,13 @@ class InternController extends Controller
         return back()->with('error', 'Error al registrar el practicante');
     }
 }
-
-    /**
-     * Muestra los detalles de un practicante.
-     */
+    
     public function show(Intern $intern)
     {
         return view('admin.interns.show', compact('intern'));
     }
 
     /**
-     * Muestra el formulario de edición de un practicante.
      */
     public function edit(Intern $intern)
     {
@@ -69,7 +59,6 @@ class InternController extends Controller
     }
 
     /**
-     * Actualiza la información del practicante en la base de datos.
      */
     public function update(Request $request, Intern $intern)
 {
@@ -83,14 +72,11 @@ class InternController extends Controller
     $intern->end_date = $request->end_date;
     $intern->institution = $request->institution;
 
-    $intern->save(); // 💾 Guardar manualmente
+    $intern->save(); 
 
     return redirect()->route('interns.index')->with('success', 'Practicante actualizado');
 }
-
-
     /**
-     * Elimina un practicante de la base de datos.
      */
     public function destroy(Intern $intern)
     {

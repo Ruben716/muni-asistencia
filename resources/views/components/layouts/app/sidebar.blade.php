@@ -2,12 +2,12 @@
 @php
     $groups = [
         'Control' => [
-            [
-                'name' => 'Control de  asistencias',
-                'icon' => 'book-open',
-                'url'  => route('dashboard'),
-                'current' => request()->routeIs('dashboard')
-            ],
+            // [
+            //     'name' => 'Control de  asistencias',
+            //     'icon' => 'book-open',
+            //     'url'  => route('dashboard'),
+            //     'current' => request()->routeIs('dashboard')
+            // ],
             [
                 'name' => 'Practicantes',
                 'icon' => 'book-open',

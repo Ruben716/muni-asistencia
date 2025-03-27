@@ -55,7 +55,7 @@
             const row = document.createElement('tr');
             
             row.innerHTML = `
-                <td class="px-4 py-2 border">${intern.id}</td>
+                
                 <td class="px-4 py-2 border">${intern.name}</td>
                 <td class="px-4 py-2 border">${intern.lastname}</td>
                 <td class="px-4 py-2 border">${intern.dni}</td>
@@ -63,7 +63,7 @@
 
                 <td class="px-4 py-2 border text-center">
     
-                    <button onclick="openDetailModal(${intern.id})" class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 transition">Ver más</button>
+                    <button onclick="openDetailModal(${intern.name})" class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 transition">Ver más</button>
 
                 </td>
             `;

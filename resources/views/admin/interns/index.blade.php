@@ -51,6 +51,104 @@
                 </tbody>
             </table>
         </div>
+        <div class="custom-pagination">
+            {{-- Previous Button --}}
+            @if ($interns->currentPage() > 1)
+                <a href="{{ $interns->previousPageUrl() }}" class="pagination-button previous-page">Previous</a>
+            @else
+                <span class="pagination-button disabled">Previous</span>
+            @endif
+        
+            {{-- Page Numbers --}}
+            @for ($i = 1; $i <= $interns->lastPage(); $i++)
+                <a href="{{ $interns->url($i) }}" class="pagination-button page-number {{ $i == $interns->currentPage() ? 'active' : '' }}">{{ $i }}</a>
+            @endfor
+        
+            {{-- Next Button --}}
+            @if ($interns->hasMorePages())
+                <a href="{{ $interns->nextPageUrl() }}" class="pagination-button next-page">Next</a>
+            @else
+                <span class="pagination-button disabled">Next</span>
+            @endif
+        </div>
+        
+        <style>
+            /* Contenedor principal de la paginación */
+            .custom-pagination {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: 5px;
+                flex-wrap: wrap; /* Permite el ajuste en pantallas más pequeñas */
+                padding: 10px 0;
+                overflow: hidden; /* Para evitar que se desborde el contenido */
+            }
+        
+            /* Botón de paginación común */
+            .pagination-button {
+                padding: 8px 16px;
+                border-radius: 4px;
+                background-color: #3498db;
+                color: #fff;
+                text-decoration: none;
+                font-size: 14px;
+                font-weight: 600;
+                transition: all 0.3s ease;
+                min-width: 50px; /* Garantiza que los botones no sean demasiado pequeños */
+                text-align: center;
+            }
+        
+            /* Efecto hover */
+            .pagination-button:hover {
+                background-color: #2980b9;
+                transform: translateY(-2px);
+            }
+        
+            /* Estado deshabilitado */
+            .pagination-button.disabled {
+                background-color: #bdc3c7;
+                color: #7f8c8d;
+                cursor: not-allowed;
+                pointer-events: none;
+            }
+        
+            /* Página activa */
+            .pagination-button.active {
+                background-color: #e74c3c;
+                color: #fff;
+            }
+        
+            /* Estilo del botón "Previous" y "Next" */
+            .previous-page, .next-page {
+                font-weight: 700;
+            }
+        
+            /* Estilos responsivos */
+            @media (max-width: 600px) {
+                .pagination-button {
+                    padding: 6px 12px;
+                    font-size: 12px;
+                    min-width: 40px; /* Botones más pequeños en pantallas pequeñas */
+                }
+        
+                .custom-pagination {
+                    padding: 8px 0; /* Reduce el espacio alrededor en pantallas pequeñas */
+                }
+            }
+        
+            @media (max-width: 400px) {
+                .pagination-button {
+                    padding: 4px 10px;
+                    font-size: 10px;
+                    min-width: 30px;
+                }
+        
+                .custom-pagination {
+                    gap: 3px; /* Reduce el espacio entre los botones en pantallas muy pequeñas */
+                }
+            }
+        </style>
+        
 
         <div id="modal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center">
             <div class="bg-white p-6 rounded-lg shadow-lg w-1/3">

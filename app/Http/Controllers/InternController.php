@@ -13,7 +13,8 @@ class InternController extends Controller
      */
     public function index()
     {
-        $interns = Intern::all();
+        $interns = Intern::paginate(15);
+
         return view('admin.interns.index', compact('interns'));
     }
 

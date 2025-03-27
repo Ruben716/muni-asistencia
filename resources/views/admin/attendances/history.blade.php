@@ -18,11 +18,11 @@
                 <!-- Mostrar la fecha del grupo -->
                 <h3 class="text-lg font-semibold mb-4">
                     @if($filter == 'day')
-                        {{ Carbon::parse($date)->format('d/m/Y') }}
+                        {{ \Carbon\Carbon::parse($date)->format('d F Y') }}
                     @elseif($filter == 'week')
-                        Semana: {{ $date }} <!-- Mostrar semana en formato Y-W -->
+                        Semana: {{ \Carbon\Carbon::parse($date)->format('o-W') }} <!-- Semana en formato Y-W -->
                     @elseif($filter == 'month')
-                        Mes: {{ Carbon::parse($date)->format('m/Y') }} <!-- Mostrar mes en formato MM/YYYY -->
+                        Mes: {{ \Carbon\Carbon::parse($date)->format('m/Y') }} <!-- Mes en formato MM/YYYY -->
                     @endif
                 </h3>
 

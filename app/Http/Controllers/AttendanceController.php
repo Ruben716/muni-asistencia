@@ -11,19 +11,44 @@ class AttendanceController extends Controller
 {
     /**
      * Muestra la lista de asistencias.
-     * gestionar que la vista por el dia y poner para ver historial 
-     * como tambien se tiene que gestionar por semanas o por meses 
-     * como tambien con el paginado 
+     * Gestiona la vista por día, semana o mes, y paginado.
      */
-    public function index()
+    public function index(Request $request)
     {
-        // Muestra las asistencias del día de hoy
-        $attendances = Attendance::with('intern')
-            ->whereDate('date', Carbon::today())
-            ->orderBy('created_at', 'desc')
-            ->get();
+        // Establecer la fecha actual
+        $today = Carbon::today();
+
+        // Filtrar por el tipo de periodo (día, semana o mes)
+        $filter = $request->input('filter', 'today'); // 'today', 'week', 'month'
         
-        return view('admin.attendances.index', compact('attendances'));
+        if ($filter == 'week') {
+            // Obtener el inicio de la semana (lunes) y fin de la semana (domingo)
+            $startOfWeek = $today->startOfWeek();
+            $endOfWeek = $today->endOfWeek();
+
+            $attendances = Attendance::with('intern')
+                ->whereBetween('date', [$startOfWeek, $endOfWeek])
+                ->orderBy('date', 'desc')
+                ->paginate(10); // Paginación de 10 registros por página
+        } elseif ($filter == 'month') {
+            // Obtener el inicio y fin del mes
+            $startOfMonth = $today->startOfMonth();
+            $endOfMonth = $today->endOfMonth();
+
+            $attendances = Attendance::with('intern')
+                ->whereBetween('date', [$startOfMonth, $endOfMonth])
+                ->orderBy('date', 'desc')
+                ->paginate(10); // Paginación de 10 registros por página
+        } else {
+            // Default: Asistencias del día actual
+            $attendances = Attendance::with('intern')
+                ->whereDate('date', $today)
+                ->orderBy('created_at', 'desc')
+                ->paginate(10); // Paginación de 10 registros por página
+        }
+        
+        // Pasar las asistencias a la vista
+        return view('admin.attendances.index', compact('attendances', 'filter'));
     }
 
     /**

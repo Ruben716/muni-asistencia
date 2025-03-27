@@ -29,16 +29,13 @@ class InternController extends Controller
         return response()->json(['interns' => $interns]);
     }
 
-    // En caso contrario, mostramos la vista con paginación
+    // En caso contrario, mostramos la vista con paginación  
     $interns = $query->paginate(15);
 
     return view('admin.interns.index', compact('interns'));
 }
-
-
-    
-
     /**
+     *
      */
     public function create()
     {

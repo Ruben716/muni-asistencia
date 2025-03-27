@@ -20,6 +20,14 @@
                 'url'  => route('attendances.index'),
                 'current' => request()->routeIs('attendances.index')
             ],
+            [
+                'name' => 'historial de asistencias',
+                'icon' => 'book-open',
+                'url'  => route('attendances.history'),
+                'current' => request()->routeIs('attendances.history')
+            ],
+            
+
         ]
     ];
 @endphp

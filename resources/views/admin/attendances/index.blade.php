@@ -1,5 +1,3 @@
-<!-- resources/views/admin/attendances/index.blade.php -->
-
 <x-layouts.app :title="__('Practicantes')">
     <div class="p-6">
         <h2 class="text-xl font-bold mb-4">Registrar Asistencia</h2>
@@ -30,6 +28,16 @@
             <button type="submit" class="btn btn-primary">Registrar Asistencia</button>
         </form>
 
+        <!-- Filtro para elegir el periodo (Hoy, Esta Semana, Este Mes) -->
+        <!-- Agregado para permitir que el usuario seleccione el filtro -->
+        <form action="{{ route('attendances.index') }}" method="GET" class="mb-4">
+            <select name="filter" onchange="this.form.submit()" class="p-2 border rounded-md">
+                <option value="today" {{ $filter == 'today' ? 'selected' : '' }}>Hoy</option>
+                <option value="week" {{ $filter == 'week' ? 'selected' : '' }}>Esta Semana</option>
+                <option value="month" {{ $filter == 'month' ? 'selected' : '' }}>Este Mes</option>
+            </select>
+        </form>
+
         <!-- Tabla de Asistencias -->
         <div class="mt-4 bg-white dark:bg-gray-800 shadow rounded-lg p-6">
             <table class="w-full border-collapse border border-gray-300 dark:border-gray-600">
@@ -43,6 +51,7 @@
                     </tr>
                 </thead>
                 <tbody>
+                    <!-- Mostrar las asistencias filtradas -->
                     @foreach($attendances as $attendance)
                         <tr class="text-center">
                             <td class="border border-gray-300 px-4 py-2">{{ $attendance->id }}</td>
@@ -56,7 +65,12 @@
                     @endforeach
                 </tbody>
             </table>
+
+            <!-- Paginación -->
+            <!-- Se agregó la paginación de los resultados -->
+            <div class="mt-4">
+                {{ $attendances->links() }}
+            </div>
         </div>
     </div>
 </x-layouts.app>
-

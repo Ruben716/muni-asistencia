@@ -26,6 +26,10 @@ Route::resource('interns', InternController::class)->middleware('auth');;
 
 Route::resource('attendances', AttendanceController::class)->middleware('auth');
 
+//nueva ruta alternativa para mas detalles de la vista 
+Route::get('/interns/{intern}', [InternController::class, 'show'])->name('interns.show');
+
+
 
 
 

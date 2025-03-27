@@ -10,47 +10,141 @@
             <table class="min-w-full bg-white border border-gray-300">
                 <thead>
                     <tr class="bg-gray-200">
-                        <th class="px-4 py-2 border">ID</th>
                         <th class="px-4 py-2 border">Nombre</th>
                         <th class="px-4 py-2 border">Apellido</th>
                         <th class="px-4 py-2 border">DNI</th>
-                        <th class="px-4 py-2 border">Teléfono</th>
-                        <th class="px-4 py-2 border">Institución</th>
-                        <th class="px-4 py-2 border">Horario</th>
-                        <th class="px-4 py-2 border">Fecha de Inicio</th>
-                        <th class="px-4 py-2 border">Fecha de Fin</th>
                         <th class="px-4 py-2 border">Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($interns as $intern)
                         <tr>
-                            <td class="px-4 py-2 border">{{ $intern->id }}</td>
                             <td class="px-4 py-2 border">{{ $intern->name }}</td>
                             <td class="px-4 py-2 border">{{ $intern->lastname }}</td>
                             <td class="px-4 py-2 border">{{ $intern->dni }}</td>
-                            <td class="px-4 py-2 border">{{ $intern->phone ?? 'N/A' }}</td>
-                            <td class="px-4 py-2 border">{{ $intern->institution }}</td>
-                            <td class="px-4 py-2 border">{{ $intern->arrival_time }} - {{ $intern->departure_time }}</td>
-                            <td class="px-4 py-2 border">{{ $intern->start_date }}</td>
-                            <td class="px-4 py-2 border">{{ $intern->end_date }}</td>
                             <td class="px-4 py-2 border text-center">
-                                <a href="{{ route('interns.edit', $intern) }}" 
-                                   class="bg-yellow-500 text-white px-3 py-1 rounded">Editar</a>
-                                <form action="{{ route('interns.destroy', $intern) }}" method="POST" class="inline-block">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="bg-red-500 text-white px-3 py-1 rounded"
-                                            onclick="return confirm('¿Estás seguro de eliminar este practicante?')">
-                                        Eliminar
-                                    </button>
-                                </form>
+                                <!-- Botón "Ver más" que abre un modal con detalles -->
+                                <button onclick="openDetailModal({{ $intern->id }})" class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 transition">Ver más</button>
                             </td>
                         </tr>
                     @endforeach
                 </tbody>
             </table>
         </div>
+
+
+<!-- Modal para los detalles completos del Practicante -->
+<div id="detailModal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center z-50">
+    <div class="bg-white p-8 rounded-lg shadow-lg w-11/12 sm:w-3/4 md:w-2/3 lg:w-1/2">
+        <!-- Título del Modal -->
+        <h2 class="text-3xl font-semibold mb-6 text-gray-800 text-center">
+            Detalles del Practicante
+        </h2>
+
+        <!-- Contenido del modal (se actualizará dinámicamente) -->
+        <div id="detailContent" class="space-y-6 mb-6 text-lg text-gray-700">
+           
+        </div>
+
+        <!-- Sección de Botones de acción: Editar y Eliminar -->
+        <div class="flex justify-end gap-6">
+            <a href="" id="editLink" class="bg-yellow-500 text-white px-6 py-3 rounded-lg text-lg hover:bg-yellow-600 transition duration-200 ease-in-out transform hover:scale-105">
+                Editar
+            </a>
+            <form id="deleteForm" method="POST" class="inline-block">
+                @csrf
+                @method('DELETE')
+                <button type="submit" id="deleteButton" class="bg-red-500 text-white px-6 py-3 rounded-lg text-lg hover:bg-red-600 transition duration-200 ease-in-out transform hover:scale-105">
+                    Eliminar
+                </button>
+            </form>
+        </div>
+
+        <!-- Botón para cerrar el modal -->
+        <div class="mt-6 text-center">
+            <button onclick="closeDetailModal()" class="bg-gray-500 text-white px-6 py-3 rounded-lg text-lg hover:bg-gray-600 transition duration-200 ease-in-out transform hover:scale-105 w-full sm:w-auto">
+                Cerrar
+            </button>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    // Función para abrir el modal con los detalles del practicante
+    function openDetailModal(internId) {
+        // Llamar a un endpoint para obtener los detalles del practicante (AJAX)
+        fetch(`/interns/${internId}`)
+            .then(response => response.json())
+            .then(data => {
+                // Mostrar los detalles en el modal
+                let content = `
+                    <p><strong>Nombre:</strong> ${data.name} ${data.lastname}</p>
+                    <p><strong>DNI:</strong> ${data.dni}</p>
+                    <p><strong>Teléfono:</strong> ${data.phone || 'N/A'}</p>
+                    <p><strong>Institución:</strong> ${data.institution}</p>
+                    <p><strong>Horario:</strong> ${data.arrival_time} - ${data.departure_time}</p>
+                    <p><strong>Fecha de Inicio:</strong> ${data.start_date}</p>
+                    <p><strong>Fecha de Fin:</strong> ${data.end_date}</p>
+                `;
+                document.getElementById('detailContent').innerHTML = content;
+
+                // Configurar los enlaces de editar y eliminar
+                document.getElementById('editLink').href = `/interns/${data.id}/edit`; // Configura el enlace de editar
+                document.getElementById('deleteForm').action = `/interns/${data.id}`; // Configura la acción del formulario de eliminar
+                document.getElementById('deleteButton').onclick = function() {
+                    return confirm('¿Estás seguro de eliminar este practicante?');
+                };
+
+                // Mostrar el modal
+                document.getElementById('detailModal').classList.remove('hidden');
+            });
+    }
+
+    // Función para cerrar el modal
+    function closeDetailModal() {
+        document.getElementById('detailModal').classList.add('hidden');
+    }
+</script>
+
+        
+        <script>
+            // Función para abrir el modal con los detalles del practicante
+            function openDetailModal(internId) {
+                // Llamar a un endpoint para obtener los detalles del practicante (AJAX)
+                fetch(`/interns/${internId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        // Mostrar los detalles en el modal
+                        let content = `
+                            <p><strong>Nombre:</strong> ${data.name} ${data.lastname}</p>
+                            <p><strong>DNI:</strong> ${data.dni}</p>
+                            <p><strong>Teléfono:</strong> ${data.phone || 'N/A'}</p>
+                            <p><strong>Institución:</strong> ${data.institution}</p>
+                            <p><strong>Horario:</strong> ${data.arrival_time} - ${data.departure_time}</p>
+                            <p><strong>Fecha de Inicio:</strong> ${data.start_date}</p>
+                            <p><strong>Fecha de Fin:</strong> ${data.end_date}</p>
+                        `;
+                        document.getElementById('detailContent').innerHTML = content;
+        
+                        // Configurar los enlaces de editar y eliminar
+                        document.getElementById('editLink').href = `/interns/${data.id}/edit`; // Configura el enlace de editar
+                        document.getElementById('deleteForm').action = `/interns/${data.id}`; // Configura la acción del formulario de eliminar
+                        document.getElementById('deleteButton').onclick = function() {
+                            return confirm('¿Estás seguro de eliminar este practicante?');
+                        };
+        
+                        // Mostrar el modal
+                        document.getElementById('detailModal').classList.remove('hidden');
+                    });
+            }
+        
+            // Función para cerrar el modal
+            function closeDetailModal() {
+                document.getElementById('detailModal').classList.add('hidden');
+            }
+        </script>
+        
         <div class="custom-pagination">
             {{-- Previous Button --}}
             @if ($interns->currentPage() > 1)

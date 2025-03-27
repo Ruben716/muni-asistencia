@@ -18,6 +18,8 @@ class InternController extends Controller
         return view('admin.interns.index', compact('interns'));
     }
 
+    
+
     /**
      */
     public function create()
@@ -47,9 +49,14 @@ class InternController extends Controller
     }
 }
     
+    //public function show(Intern $intern)
+   // {
+        //return view('admin.interns.show', compact('intern'));
+    //}
+    //se modifico el show
     public function show(Intern $intern)
     {
-        return view('admin.interns.show', compact('intern'));
+        return response()->json($intern); // Devuelve los datos del practicante como JSON
     }
 
     /**

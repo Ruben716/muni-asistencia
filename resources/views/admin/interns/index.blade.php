@@ -5,7 +5,75 @@
         <button onclick="openModal()" class="bg-blue-500 text-white px-4 py-2 rounded mb-4">
             + Agregar Practicante
         </button>
+        <!--  busqueda de practicantes mediante DNI -->
+        
+        <div class="flex justify-between items-center mb-6">
+            <div class="flex items-center space-x-2">
+                <label for="dniSearch" class="font-semibold text-gray-700">Buscar por DNI:</label>
+                    <input 
+                        type="text" 
+                        id="dniSearch" 
+                        class="border border-gray-300 p-2 rounded-md" 
+                        placeholder="Buscar por DNI"
+                    >
+                </div>
+            <button onclick="searchByDni()" class="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition">
+        Buscar
+    </button>
+</div>
 
+<!--  script de la busqueda para que se reacargue en la mism vista generar  -->
+
+<script>
+    function searchByDni() {
+        // Obtener el valor del campo de búsqueda
+        const dni = document.getElementById('dniSearch').value;
+
+        // Realizar la solicitud AJAX
+        fetch("{{ route('interns.index') }}?dni=" + dni, {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+        })
+        .then(response => response.json()) // Esperar la respuesta en formato JSON
+        .then(data => {
+            // Actualizar el contenido de la tabla con los resultados de la búsqueda
+            updateTable(data.interns);
+        })
+        .catch(error => console.error('Error en la búsqueda:', error));
+    }
+
+    // Función para actualizar la tabla con los nuevos datos
+    function updateTable(interns) {
+        const tableBody = document.querySelector('table tbody');
+        tableBody.innerHTML = ''; // Limpiar la tabla actual
+
+        // Recorrer los resultados y agregarlos a la tabla
+        interns.forEach(intern => {
+            const row = document.createElement('tr');
+            
+            row.innerHTML = `
+                <td class="px-4 py-2 border">${intern.id}</td>
+                <td class="px-4 py-2 border">${intern.name}</td>
+                <td class="px-4 py-2 border">${intern.lastname}</td>
+                <td class="px-4 py-2 border">${intern.dni}</td>
+                
+
+                <td class="px-4 py-2 border text-center">
+    
+                    <button onclick="openDetailModal(${intern.id})" class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 transition">Ver más</button>
+
+                </td>
+            `;
+            tableBody.appendChild(row); // Agregar la fila a la tabla
+        });
+    }
+</script>
+
+
+        <!--  vista de todos los practicantes -->
         <div class="overflow-x-auto">
             <table class="min-w-full bg-white border border-gray-300">
                 <thead>
@@ -31,7 +99,6 @@
                 </tbody>
             </table>
         </div>
-
 
 <!-- Modal para los detalles completos del Practicante -->
 <div id="detailModal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center z-50">
@@ -72,6 +139,11 @@
 
 <script>
     // Función para abrir el modal con los detalles del practicante
+
+    function test(e){
+
+        console.log('test:',e)
+    }
     function openDetailModal(internId) {
         // Llamar a un endpoint para obtener los detalles del practicante (AJAX)
         fetch(`/interns/${internId}`)

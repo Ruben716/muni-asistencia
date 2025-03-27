@@ -11,6 +11,9 @@ class AttendanceController extends Controller
 {
     /**
      * Muestra la lista de asistencias.
+     * gestionar que la vista por el dia y poner para ver historial 
+     * como tambien se tiene que gestionar por semanas o por meses 
+     * como tambien con el paginado 
      */
     public function index()
     {

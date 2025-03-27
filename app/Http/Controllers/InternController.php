@@ -9,14 +9,32 @@ use Illuminate\Support\Facades\Auth;
 class InternController extends Controller
 {
     /**
+     * para que no se recargue la pagia sera de utilzar ela funcion de ajax 
      * 
      */
-    public function index()
-    {
-        $interns = Intern::paginate(15);
+    public function index(Request $request)
+{
+    $query = Intern::query();
 
-        return view('admin.interns.index', compact('interns'));
+    // Si hay un parámetro 'dni' en la solicitud, filtramos los resultados por el DNI.
+    if ($dni = $request->get('dni')) {
+        $query->where('dni', 'like', "%$dni%");
     }
+
+    // Obtener los resultados filtrados y luego
+    $interns = $query->get();
+
+    // Si la solicitud es AJAX, retornamos los resultados como JSON
+    if ($request->wantsJson()) {
+        return response()->json(['interns' => $interns]);
+    }
+
+    // En caso contrario, mostramos la vista con paginación
+    $interns = $query->paginate(15);
+
+    return view('admin.interns.index', compact('interns'));
+}
+
 
     
 

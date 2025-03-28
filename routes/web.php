@@ -28,15 +28,15 @@ Route::resource('interns', InternController::class)->middleware('auth');;
 Route::resource('attendances', AttendanceController::class)->middleware('auth');
 
 //nueva ruta alternativa para mas detalles de la vista 
-Route::get('/interns/{intern}', [InternController::class, 'show'])->name('interns.show');
+Route::get('/interns/{intern}', [InternController::class, 'show'])->name('interns.show')->middleware('auth');
 
 
 
 
 // Define la ruta para el historial de asistencias
 
-Route::get('/historial-asistencias', [AttendanceHistoryController::class, 'index'])->name('attendances.history'); // Cambio aquí
-// Route::resource('attendances', AttendanceHistoryController::class);
+Route::get('/historial-asistencias', [AttendanceHistoryController::class, 'index'])->name('historial-asistencias.index'); // Cambio aquí
+
 
 
 require __DIR__.'/auth.php';

@@ -3,7 +3,7 @@
         <h2 class="text-xl font-bold mb-4">Historial de Asistencias</h2>
 
         <!-- Filtro para seleccionar día, semana, mes -->
-        <form method="GET" action="{{ route('attendance.history') }}" class="mb-4">
+        <form method="GET" action="{{ route('historial-asistencias.index') }}" class="mb-4">
             <label for="filter" class="mr-2">Filtrar por:</label>
             <select name="filter" id="filter" onchange="this.form.submit()" class="p-2 border rounded">
                 <option value="day" {{ $filter == 'day' ? 'selected' : '' }}>Día</option>

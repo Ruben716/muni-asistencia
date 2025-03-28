@@ -23,8 +23,8 @@
             [
                 'name' => 'historial de asistencias',
                 'icon' => 'book-open',
-                'url'  => route('attendances.history'),
-                'current' => request()->routeIs('attendances.history')
+                'url'  => route('historial-asistencias.index'),
+                'current' => request()->routeIs('historial-asistencias.index')
             ],
             
 

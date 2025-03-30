@@ -57,15 +57,15 @@ public function exportGlobalReport()
 
             return [
                 'date' => $date,
-                'status' => $attendance 
+                'status' => $attendance
                     ? ($attendance->is_late ? 'Tarde' : 'Asistencia')
-                    : 'Falta'
+                    : 'Falta',
             ];
         });
 
         $pdf = Pdf::loadView('admin.attendances.individual_report', compact('intern', 'reportData'));
 
-        return $pdf->download('reporte_individual_asistencias.pdf');
+        return $pdf->stream('reporte_individual_asistencias.pdf');
     }
 
 

@@ -76,6 +76,14 @@ class AttendanceController extends Controller
         $today = Carbon::today()->toDateString(); // Fecha actual
         $now = Carbon::now()->toTimeString(); // Hora actual
 
+        $intern = Intern::where('dni', $request->dni)->first(); // Busca al practicante por su DNI
+
+        if ($intern) {
+         session(['dni_registrado' => $intern->id]); // Guarda el ID en vez del DNI
+        }
+
+
+
         // Buscar si ya existe un registro de asistencia para el practicante hoy
         $attendance = Attendance::where('intern_id', $intern->id)
                                 ->where('date', $today)
@@ -100,4 +108,6 @@ class AttendanceController extends Controller
             return back()->withErrors(['dni' => 'Ya registraste entrada y salida hoy.']);
         }
     }
+    //ultima añadidura pero en prueva 
+    
 }

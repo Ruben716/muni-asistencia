@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Intern;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
+
 
 class InternController extends Controller
 {
@@ -55,14 +58,35 @@ class InternController extends Controller
         'end_date' => 'required|date|after:start_date',
         'institution' => 'nullable|string|max:255',
     ]);
+
     $intern = Intern::create($validated);
 
     if ($intern) {
-        return redirect()->route('interns.index')->with('success', 'Practicante registrado correctamente');
+        // Crear el usuario automáticamente
+        $email = $request->dni . '@example.com';
+        $password = $request->dni; // Guardamos la contraseña para mostrarla en la alerta
+
+        $user = User::create([
+            'name' => $request->name . ' ' . $request->lastname,
+            'email' => $email,
+            'password' => Hash::make($password),
+        ]);
+
+        // Asignar el rol 'user'
+        $user->assignRole('user');
+
+        // Guardar los datos en la sesión para mostrarlos en la vista
+        return redirect()->route('interns.index')->with([
+            'success' => 'Practicante registrado correctamente.',
+            'email' => $email,
+            'password' => $password
+        ]);
     } else {
-        return back()->with('error', 'Error al registrar el practicante');
+        return back()->with('error', 'Error al registrar el practicante.');
     }
 }
+
+
     
     //public function show(Intern $intern)
    // {

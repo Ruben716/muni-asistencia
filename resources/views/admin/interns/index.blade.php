@@ -23,6 +23,13 @@
 </div>
 
 <!--  script de la busqueda para que se reacargue en la mism vista generar  -->
+@if(session('email') && session('password'))
+    <div class="alert alert-success">
+        <strong>✅ Cuenta creada exitosamente</strong><br>
+        <p><b>Correo:</b> {{ session('email') }}</p>
+        <p><b>Contraseña:</b> {{ session('password') }}</p>
+    </div>
+@endif
 
 <script>
     function searchByDni() {

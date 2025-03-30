@@ -1,7 +1,7 @@
 <x-layouts.app :title="__('Practicantes')">
     <div class="p-6">
         <h2 class="text-xl font-bold mb-4">Registrar Asistencia</h2>
-        
+
         <!-- Mostrar mensajes de éxito o error -->
         @if(session('success'))
             <div class="bg-green-500 text-white p-2 mb-4">{{ session('success') }}</div>
@@ -28,15 +28,13 @@
             <button type="submit" class="btn btn-primary">Registrar Asistencia</button>
         </form>
 
-        <!-- Filtro para elegir el periodo (Hoy, Esta Semana, Este Mes) -->
-        <!-- Agregado para permitir que el usuario seleccione el filtro -->
-        <form action="{{ route('attendances.index') }}" method="GET" class="mb-4">
-            <select name="filter" onchange="this.form.submit()" class="p-2 border rounded-md">
-                <option value="today" {{ $filter == 'today' ? 'selected' : '' }}>Hoy</option>
-                <option value="week" {{ $filter == 'week' ? 'selected' : '' }}>Esta Semana</option>
-                <option value="month" {{ $filter == 'month' ? 'selected' : '' }}>Este Mes</option>
-            </select>
-        </form>
+        <!-- Mostrar botón de reporte solo si se ha registrado un DNI -->
+        @if(session('dni_registrado'))
+        <a href="{{ route('export.individual', session('dni_registrado')) }}" class="btn btn-secondary">
+            Descargar Reporte Individual
+        </a>
+    @endif
+    
 
         <!-- Tabla de Asistencias -->
         <div class="mt-4 bg-white dark:bg-gray-800 shadow rounded-lg p-6">
@@ -51,7 +49,6 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Mostrar las asistencias filtradas -->
                     @foreach($attendances as $attendance)
                         <tr class="text-center">
                             <td class="border border-gray-300 px-4 py-2">{{ $attendance->id }}</td>
@@ -67,7 +64,6 @@
             </table>
 
             <!-- Paginación -->
-            <!-- Se agregó la paginación de los resultados -->
             <div class="mt-4">
                 {{ $attendances->links() }}
             </div>

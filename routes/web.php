@@ -30,7 +30,7 @@ Route::middleware(['auth'])->group(function () {
 });
 
 // Rutas solo para el ADMIN
-Route::middleware(['auth', 'role:admin'])->group(function () {
+Route::middleware(['auth' ])->group(function () {
     Route::resource('interns', InternController::class);
     Route::get('/interns/{intern}', [InternController::class, 'show'])->name('interns.show');
 
@@ -46,4 +46,4 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/historial-asistencias', [AttendanceHistoryController::class, 'index'])->name('historial-asistencias.index');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__.'/auth.php';        

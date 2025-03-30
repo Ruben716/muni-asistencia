@@ -63,7 +63,7 @@ class InternController extends Controller
 
     if ($intern) {
         // Crear el usuario automáticamente
-        $email = $request->dni . '@example.com';
+        $email = $request->dni . '@gmail.com';
         $password = $request->dni; // Guardamos la contraseña para mostrarla en la alerta
 
         $user = User::create([

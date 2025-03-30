@@ -5,6 +5,13 @@
         <button onclick="openModal()" class="bg-blue-500 text-white px-4 py-2 rounded mb-4">
             + Agregar Practicante
         </button>
+        {{-- boton de reporte global  --}}
+        <div class="flex justify-end">
+            <flux:button variant="primary" onclick="window.location='{{ route('export.global') }}'">
+                Exportar Reporte Global
+            </flux:button>
+        </div>
+        
         <!--  busqueda de practicantes mediante DNI -->
         
         <div class="flex justify-between items-center mb-6">
@@ -99,6 +106,12 @@
                             <td class="px-4 py-2 border">{{ $intern->dni }}</td>
                             <td class="px-4 py-2 border text-center">
                                 <!-- Botón "Ver más" que abre un modal con detalles -->
+                              
+                                <flux:button variant="filled" onclick="window.location='{{ route('export.individual', session('dni_registrado')) }}'">
+                                    Descargar Reporte Individual
+                                </flux:button>
+                                
+    
                                 <button onclick="openDetailModal({{ $intern->id }})" class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 transition">Ver más</button>
                             </td>
                         </tr>

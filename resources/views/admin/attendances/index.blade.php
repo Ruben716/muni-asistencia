@@ -29,11 +29,11 @@
         </form>
 
         <!-- Mostrar botón de reporte solo si se ha registrado un DNI -->
-        @if(session('dni_registrado'))
+        {{-- @if(session('dni_registrado'))
         <a href="{{ route('export.individual', session('dni_registrado')) }}" class="btn btn-secondary">
             Descargar Reporte Individual
         </a>
-    @endif
+    @endif --}}
     
 
         <!-- Tabla de Asistencias -->

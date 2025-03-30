@@ -78,9 +78,9 @@ class AttendanceController extends Controller
 
         $intern = Intern::where('dni', $request->dni)->first(); // Busca al practicante por su DNI
 
-        if ($intern) {
-         session(['dni_registrado' => $intern->id]); // Guarda el ID 
-        }
+        // if ($intern) {
+        //  session(['dni_registrado' => $intern->id]); // Guarda el ID 
+        // }
 
 
 

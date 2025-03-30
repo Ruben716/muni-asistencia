@@ -39,6 +39,8 @@ public function exportGlobalReport()
 public function exportIndividualReport($internId)
 {
     $intern = Intern::with('attendances')->findOrFail($internId);
+        $intern = Intern::with('attendances')->findOrFail($internId);
+
 
     // Obtener fechas hábiles
     $startDate = $intern->start_date;

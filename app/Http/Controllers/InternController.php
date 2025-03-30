@@ -27,6 +27,12 @@ class InternController extends Controller
     // Obtener los resultados filtrados y luego
     $interns = $query->get();
 
+
+    // if ($interns) {
+    //     session(['dni' => $interns->id]); // Guarda el ID 
+    //    }
+
+
     // Si la solicitud es AJAX, retornamos los resultados como JSON
     if ($request->wantsJson()) {
         return response()->json(['interns' => $interns]);

@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\AttendanceHistoryController;
+use App\Http\Controllers\AttendanceReportController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -30,6 +31,10 @@ Route::resource('attendances', AttendanceController::class)->middleware('auth');
 //nueva ruta alternativa para mas detalles de la vista 
 Route::get('/interns/{intern}', [InternController::class, 'show'])->name('interns.show')->middleware('auth');
 
+//control de pdf 
+Route::get('/attendance/export', [AttendanceHistoryController::class, 'export'])->name('attendance.export');
+
+
 
 
 
@@ -37,6 +42,12 @@ Route::get('/interns/{intern}', [InternController::class, 'show'])->name('intern
 
 Route::get('/historial-asistencias', [AttendanceHistoryController::class, 'index'])->name('historial-asistencias.index'); // Cambio aquí
 
+// Rutas de reportes tanto el gloval y el individual 
+// Ruta para el reporte global
+Route::get('/export-global-report', [AttendanceReportController::class, 'exportGlobalReport'])->name('export.global');
+
+// Ruta para el reporte individual (requiere el ID del practicante)
+Route::get('/export-individual-report/{intern}', [AttendanceReportController::class, 'exportIndividualReport'])->name('export.individual');
 
 
 require __DIR__.'/auth.php';

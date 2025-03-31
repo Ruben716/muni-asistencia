@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Attendance;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
+
 
 class AttendanceHistoryController extends Controller
 {
@@ -71,4 +73,33 @@ class AttendanceHistoryController extends Controller
                 return Carbon::parse($attendance->date)->format('Y-m'); // Agrupar por año-mes
             });
     }
+    public function export(Request $request)
+    {
+    // Obtener el filtro
+    $filter = $request->get('filter', 'day');
+
+    // Obtener asistencias según el filtro
+    switch ($filter) {
+        case 'week':
+            $attendances = $this->getAttendanceByWeek();
+            $title = "Reporte Semanal de Asistencias";
+            break;
+        case 'month':
+            $attendances = $this->getAttendanceByMonth();
+            $title = "Reporte Mensual de Asistencias";
+            break;
+        case 'day':
+        default:
+            $attendances = $this->getAttendanceByDay();
+            $title = "Reporte Diario de Asistencias";
+            break;
+    }
+
+    // Generar PDF con la vista 'attendances.report'
+    $pdf = Pdf::loadView('admin.attendances.report', compact('attendances', 'title', 'filter'));
+
+    // Descargar el archivo
+    return $pdf->download('reporte_asistencias.pdf');
+    }
+
 }

@@ -109,6 +109,9 @@
                                 <flux:button variant="filled" onclick="window.location='{{ route('export.individual', $intern->id) }}'">
                                     Descargar Reporte Individual
                                 </flux:button>
+                                {{-- <flux:button icon="arrow-down-tray"variant="filled" onclick="window.location='{{ route('export.individual', $intern->id) }}'">
+                                    Descargar Reporte Individual
+                                </flux:button> --}}
         
                                 <!-- Botón "Ver más" -->
                                 <button onclick="openDetailModal({{ $intern->id }})" class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 transition">

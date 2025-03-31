@@ -11,11 +11,12 @@
     </style>
 </head>
 <body>
-    {{-- <div style="width: 100%; display: flex; justify-content: space-between; align-items: center;">
-        <img src="{{ asset('storage/imagenes/Logo-Puno.png') }}" width="100">
-        <img src="{{ asset('storage/imagenes/COA_Puno.png') }}" width="100">
-
-    </div> --}}
+    <div style="width: 100%; display: flex; justify-content: space-between; align-items: center;">
+        <img src="{{'imagen/COA_Puno.png'}}" width="100" align="left" >
+        <img src="{{'imagen/Logo-Puno-Renace.png'}}" width="100" align="right" >
+        
+    </div>
+   
     
     
     
@@ -40,23 +41,22 @@
         
        </div>
 
-       <p>
-        <strong>
-         NOMBRES Y APELLIDOS:
-        </strong>
-        {{ $intern->name }} {{ $intern->lastname }}
-       </p>
-       <p>
+       <p >
+        <strong>NOMBRES Y APELLIDO :    </strong> 
+        <span style="text-align: center" >{{ $intern->name }} {{ $intern->lastname }}</span>   
+        </p>
+    
         <strong>
          OFICINA DESIGNADA:
         </strong>
-        {{ $intern->institution }}
+        Ofisina de Tecnologia Informata
        </p>
        <p>
         <strong>
          CARRERA PROFESIONAL:
         </strong>
-        Escuela Profesional de Ingeniería de Sistemas
+        ING de sistemas 
+        {{-- {{ $intern->institution }} --}}
        </p>
       
        <p>

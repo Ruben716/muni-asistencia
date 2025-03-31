@@ -16,6 +16,11 @@ return new class extends Migration
             
             $table->string('name');
             $table->string('lastname');
+            $table->enum('turno', ['M','T'])->nullable();
+            $table->date('happy')->nullable();
+            $table->integer('active')->dafault(1);
+            $table->enum('espacialidad',['P','S','R'])->nullable();
+            $table->string('lastname');
             $table->string('dni', 8)->unique();
             $table->string('phone', 9)->nullable();
             $table->time('arrival_time')->nullable();
@@ -25,6 +30,7 @@ return new class extends Migration
             $table->string('institution')->nullable(); // Institución de procedencia
             $table->timestamps();
         });
+        //se agrego tres campos que son para el turno cunpleaños y la descripcion para ver a que se dedica 
     }
     
 

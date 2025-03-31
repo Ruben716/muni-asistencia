@@ -11,7 +11,14 @@
     </style>
 </head>
 <body>
+    {{-- <div style="width: 100%; display: flex; justify-content: space-between; align-items: center;">
+        <img src="{{ asset('storage/imagenes/Logo-Puno.png') }}" width="100">
+        <img src="{{ asset('storage/imagenes/COA_Puno.png') }}" width="100">
 
+    </div> --}}
+    
+    
+    
     <div class="text-center mb-4" style="text-align: center;">
         
         <h2 class="text-xl font-bold">
@@ -86,13 +93,15 @@
             @foreach ($reportData as $row)
                 <tr>
                     <td>{{ $row['date'] }}</td>
-                    {{-- <td>{{$row['check_in']}}</td>
-                    <td>{{$row['check_out']}}</td> --}}
+                    <td>{{ $row['check_in'] }}</td>
+                    <td>{{ $row['check_out'] }}</td>
                     <td>{{ $row['status'] }}</td>
-                    <td></td>
+                    <td></td> {{-- Aquí puedes agregar observaciones si lo necesitas --}}
                 </tr>
             @endforeach
         </tbody>
     </table>
+    
+    
 </body>
 </html>

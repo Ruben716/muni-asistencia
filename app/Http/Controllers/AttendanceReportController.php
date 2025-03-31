@@ -52,21 +52,25 @@ public function exportGlobalReport()
         }
 
         // Construir reporte
+        // Construir reporte
         $reportData = $allDates->map(function ($date) use ($intern) {
-            $attendance = $intern->attendances->where('date', $date)->first();
+        $attendance = $intern->attendances->where('date', $date)->first();
 
-            return [
+        return [
                 'date' => $date,
                 'status' => $attendance
-                    ? ($attendance->is_late ? 'Tarde' : 'Asistencia')
-                    : 'Falta',
-            ];
-        });
+                    ? ($attendance->is_late ? 'Tarde' : 'Presente')
+                    : 'Ausente',
+                'check_in' => $attendance?->check_in ?? 'N/A',
+                'check_out' => $attendance?->check_out ?? 'N/A',
+    ];
+});
+
 
         $pdf = Pdf::loadView('admin.attendances.individual_report', compact('intern', 'reportData'));
 
         return $pdf->stream('reporte_individual_asistencias.pdf');
-    }
+    } 
 
 
 }

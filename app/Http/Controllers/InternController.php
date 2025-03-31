@@ -27,6 +27,10 @@ class InternController extends Controller
         // Obtener los resultados filtrados y luego
         $interns = $query->get();
 
+        //orden de la vista de datos 
+        $query->orderBy('id', 'desc');
+
+
 
         // if ($interns) {
         //     session(['dni' => $interns->id]); // Guarda el ID 

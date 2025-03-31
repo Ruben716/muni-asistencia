@@ -36,39 +36,37 @@ public function exportGlobalReport()
     return $pdf->download('reporte_global_asistencias.pdf');
 }
 
-public function exportIndividualReport($internId)
-{
-    $intern = Intern::with('attendances')->findOrFail($internId);
-        $intern = Intern::with('attendances')->findOrFail($internId);
-
-
-    // Obtener fechas hábiles
-    $startDate = $intern->start_date;
-    $endDate = $intern->end_date;
-    $allDates = collect();
-    
-    for ($date = $startDate; $date <= $endDate; $date = date('Y-m-d', strtotime($date . ' +1 day'))) {
-        if (!in_array(date('N', strtotime($date)), [6, 7])) { // Excluir sábados (6) y domingos (7)
-            $allDates->push($date);
+    public function exportIndividualReport($internId)
+    {
+        $intern = Intern::find($internId);
+            
+        // Obtener fechas hábiles
+        $startDate = $intern->start_date;
+        $endDate = $intern->end_date;
+        $allDates = collect();
+        
+        for ($date = $startDate; $date <= $endDate; $date = date('Y-m-d', strtotime($date . ' +1 day'))) {
+            if (!in_array(date('N', strtotime($date)), [6, 7])) { // Excluir sábados (6) y domingos (7)
+                $allDates->push($date);
+            }
         }
+
+        // Construir reporte
+        $reportData = $allDates->map(function ($date) use ($intern) {
+            $attendance = $intern->attendances->where('date', $date)->first();
+
+            return [
+                'date' => $date,
+                'status' => $attendance 
+                    ? ($attendance->is_late ? 'Tarde' : 'Asistencia')
+                    : 'Falta'
+            ];
+        });
+
+        $pdf = Pdf::loadView('admin.attendances.individual_report', compact('intern', 'reportData'));
+
+        return $pdf->download('reporte_individual_asistencias.pdf');
     }
-
-    // Construir reporte
-    $reportData = $allDates->map(function ($date) use ($intern) {
-        $attendance = $intern->attendances->where('date', $date)->first();
-
-        return [
-            'date' => $date,
-            'status' => $attendance 
-                ? ($attendance->is_late ? 'Tarde' : 'Asistencia')
-                : 'Falta'
-        ];
-    });
-
-    $pdf = Pdf::loadView('admin.attendances.individual_report', compact('intern', 'reportData'));
-
-    return $pdf->download('reporte_individual_asistencias.pdf');
-}
 
 
 }

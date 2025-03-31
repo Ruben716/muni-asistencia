@@ -16,33 +16,33 @@ class InternController extends Controller
      * 
      */
     public function index(Request $request)
-{
-    $query = Intern::query();
+    {
+        $query = Intern::query();
 
-    // Si hay un parámetro 'dni' en la solicitud, filtramos los resultados por el DNI.
-    if ($dni = $request->get('dni')) {
-        $query->where('dni', 'like', "%$dni%");
+        // Si hay un parámetro 'dni' en la solicitud, filtramos los resultados por el DNI.
+        if ($dni = $request->get('dni')) {
+            $query->where('dni', 'like', "%$dni%");
+        }
+
+        // Obtener los resultados filtrados y luego
+        $interns = $query->get();
+
+
+        // if ($interns) {
+        //     session(['dni' => $interns->id]); // Guarda el ID 
+        //    }
+
+
+        // Si la solicitud es AJAX, retornamos los resultados como JSON
+        if ($request->wantsJson()) {
+            return response()->json(['interns' => $interns]);
+        }
+
+        // En caso contrario, mostramos la vista con paginación  
+        $interns = $query->paginate(15);
+
+        return view('admin.interns.index', compact('interns'));
     }
-
-    // Obtener los resultados filtrados y luego
-    $interns = $query->get();
-
-
-    // if ($interns) {
-    //     session(['dni' => $interns->id]); // Guarda el ID 
-    //    }
-
-
-    // Si la solicitud es AJAX, retornamos los resultados como JSON
-    if ($request->wantsJson()) {
-        return response()->json(['interns' => $interns]);
-    }
-
-    // En caso contrario, mostramos la vista con paginación  
-    $interns = $query->paginate(15);
-
-    return view('admin.interns.index', compact('interns'));
-}
     /**
      *
      */

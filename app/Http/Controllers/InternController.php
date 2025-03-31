@@ -63,6 +63,7 @@ class InternController extends Controller
 
         'turno' => 'required|string|max:50',
         'happy'=> 'required|date',
+        //el activate solucionar ya que no se puede guardar 
         'active'=> 'required|int',
         'espacialidad'=> 'required|string|max:20',
 

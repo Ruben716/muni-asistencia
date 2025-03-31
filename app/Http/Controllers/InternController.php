@@ -60,6 +60,12 @@ class InternController extends Controller
     $validated = $request->validate([
         'name' => 'required|string|max:255',
         'lastname' => 'required|string|max:255',
+
+        'turno' => 'required|string|max:50',
+        'happy'=> 'required|date',
+        'active'=> 'required|int',
+        'espacialidad'=> 'required|string|max:20',
+
         'dni' => 'required|string|size:8|unique:interns,dni',
         'phone' => 'nullable|string|size:9',
         'arrival_time' => 'required|date_format:H:i',

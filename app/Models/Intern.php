@@ -13,6 +13,10 @@ class Intern extends Model
         
         'name',
         'lastname',
+        'turno',
+        'happy',
+        'active',
+        'espacialidad',
         'dni',
         'phone',
         'arrival_time',

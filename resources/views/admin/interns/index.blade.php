@@ -96,6 +96,7 @@
                         <th class="px-4 py-2 border">Apellido</th>
                         <th class="px-4 py-2 border">DNI</th>
                         <th class="px-4 py-2 border">Acciones</th>
+                        
                     </tr>
                 </thead>
                 <tbody>
@@ -178,6 +179,12 @@
                 let content = `
                     <p><strong>Nombre:</strong> ${data.name} ${data.lastname}</p>
                     <p><strong>DNI:</strong> ${data.dni}</p>
+
+                    <p><strong>Turno:</strong>        ${data.turno}           </p>
+                    <p><strong>Cumpleaños:</strong>   ${data.happy}           </p>
+                    <p><strong>Estado:  </strong>     ${data.active}          </p>
+                    <p><strong>Especialidad: </strong>${data.espacialidad}    </p>
+
                     <p><strong>Teléfono:</strong> ${data.phone || 'N/A'}</p>
                     <p><strong>Institución:</strong> ${data.institution}</p>
                     <p><strong>Horario:</strong> ${data.arrival_time} - ${data.departure_time}</p>
@@ -215,6 +222,12 @@
                         // Mostrar los detalles en el modal
                         let content = `
                             <p><strong>Nombre:</strong> ${data.name} ${data.lastname}</p>
+
+                            <p><strong>Turno:</strong>        ${data.turno}    </p>
+                            <p><strong>Cumpleaños:</strong>   ${data.happy}    </p>
+                            <p><strong>Estado:  </strong>     ${data.active}    </p>
+                            <p><strong>Especialidad: </strong>${data.espacialidad}    </p>
+
                             <p><strong>DNI:</strong> ${data.dni}</p>
                             <p><strong>Teléfono:</strong> ${data.phone || 'N/A'}</p>
                             <p><strong>Institución:</strong> ${data.institution}</p>
@@ -340,69 +353,112 @@
             }
         </style>
         
+        {{-- nodal para que crear un usuario 
+         --}}
+         {{-- <div id="modal" class="hidden fixed inset-0 bg-gray-200 bg-opacity-150 dark:bg-opacity-50 dark:backdrop-blur-md flex justify-center items-center"> --}}
+            <div id="modal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-80 backdrop-blur-lg flex justify-center items-center">
 
-        <div id="modal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center">
+         {{-- <div id="modal" class="hidden fixed inset-0 dark:bg-gray-900 bg-opacity-50 flex justify-center items-center"> --}}
             <div class="bg-white p-6 rounded-lg shadow-lg w-1/3">
                 <h2 class="text-xl font-bold mb-4">Agregar Practicante</h2>
                 <form action="{{ route('interns.store') }}" method="POST">
                     @csrf
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="mb-2">
-                            <label for="name" class="block text-sm font-semibold">Nombre:</label>
-                            <input type="text" name="name" id="name" class="w-full border px-3 py-2 rounded" autocomplete="given-name" required>
+                    <div class="flex flex-col space-y-4">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label for="name" class="block text-sm font-semibold">Nombre:</label>
+                                <input type="text" name="name" id="name" class="w-full border px-3 py-2 rounded" autocomplete="given-name" required>
+                            </div>
+                            <div>
+                                <label for="lastname" class="block text-sm font-semibold">Apellido:</label>
+                                <input type="text" name="lastname" id="lastname" class="w-full border px-3 py-2 rounded" autocomplete="family-name" required>
+                            </div>
                         </div>
-                        <div class="mb-2">
-                            <label for="lastname" class="block text-sm font-semibold">Apellido:</label>
-                            <input type="text" name="lastname" id="lastname" class="w-full border px-3 py-2 rounded" autocomplete="family-name" required>
+        
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label for="dni" class="block text-sm font-semibold">DNI:</label>
+                                <input type="text" name="dni" id="dni" class="w-full border px-3 py-2 rounded" pattern="\d{8}" title="Debe contener 8 dígitos" autocomplete="off" required>
+                            </div>
+                            <div>
+                                <label for="phone" class="block text-sm font-semibold">Teléfono:</label>
+                                <input type="text" name="phone" id="phone" class="w-full border px-3 py-2 rounded" pattern="\d{9}" title="Debe contener 9 dígitos" autocomplete="tel">
+                            </div>
                         </div>
-                    </div>
-                    
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="mb-2">
-                            <label for="dni" class="block text-sm font-semibold">DNI:</label>
-                            <input type="text" name="dni" id="dni" class="w-full border px-3 py-2 rounded" pattern="\d{8}" title="Debe contener 8 dígitos" autocomplete="off" required>
+        
+                        <div>
+                            <label for="institution" class="block text-sm font-semibold">Institución:</label>
+                            <input type="text" name="institution" id="institution" class="w-full border px-3 py-2 rounded" autocomplete="organization" required>
                         </div>
-                        <div class="mb-2">
-                            <label for="phone" class="block text-sm font-semibold">Teléfono:</label>
-                            <input type="text" name="phone" id="phone" class="w-full border px-3 py-2 rounded" pattern="\d{9}" title="Debe contener 9 dígitos" autocomplete="tel">
+        
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label for="arrival_time" class="block text-sm font-semibold">Hora de Llegada:</label>
+                                <input type="time" name="arrival_time" id="arrival_time" class="w-full border px-3 py-2 rounded" required>
+                            </div>
+                            <div>
+                                <label for="departure_time" class="block text-sm font-semibold">Hora de Salida:</label>
+                                <input type="time" name="departure_time" id="departure_time" class="w-full border px-3 py-2 rounded" required>
+                            </div>
                         </div>
-                    </div>
-                    
-                    <div class="mb-2">
-                        <label for="institution" class="block text-sm font-semibold">Institución:</label>
-                        <input type="text" name="institution" id="institution" class="w-full border px-3 py-2 rounded" autocomplete="organization" required>
-                    </div>
-                    
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="mb-2">
-                            <label for="arrival_time" class="block text-sm font-semibold">Hora de Llegada:</label>
-                            <input type="time" name="arrival_time" id="arrival_time" class="w-full border px-3 py-2 rounded" required>
+        
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label for="start_date" class="block text-sm font-semibold">Fecha de Inicio:</label>
+                                <input type="date" name="start_date" id="start_date" class="w-full border px-3 py-2 rounded" required>
+                            </div>
+                            <div>
+                                <label for="end_date" class="block text-sm font-semibold">Fecha de Fin:</label>
+                                <input type="date" name="end_date" id="end_date" class="w-full border px-3 py-2 rounded" required>
+                            </div>
                         </div>
-                        <div class="mb-2">
-                            <label for="departure_time" class="block text-sm font-semibold">Hora de Salida:</label>
-                            <input type="time" name="departure_time" id="departure_time" class="w-full border px-3 py-2 rounded" required>
+        
+                        <!-- NUEVOS CAMPOS -->
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label for="turno" class="block text-sm font-semibold">Turno:</label>
+                                <select name="turno" id="turno" class="w-full border px-3 py-2 rounded">
+                                    <option value="">Seleccionar...</option>
+                                    <option value="M">Mañana</option>
+                                    <option value="T">Tarde</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="espacialidad" class="block text-sm font-semibold">Especialidad:</label>
+                                <select name="espacialidad" id="espacialidad" class="w-full border px-3 py-2 rounded">
+                                    <option value="">Seleccionar...</option>
+                                    <option value="P">Programacion</option>
+                                    <option value="S">Soporte</option>
+                                    <option value="R">Redes</option>
+                                </select>
+                            </div>
                         </div>
-                    </div>
-                    
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="mb-2">
-                            <label for="start_date" class="block text-sm font-semibold">Fecha de Inicio:</label>
-                            <input type="date" name="start_date" id="start_date" class="w-full border px-3 py-2 rounded" required>
+
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label for="happy " class="block text-sm font-semibold">Fecha de Cumpleaños:</label>
+                                <input type="date" name="happy" id="happy" class="w-full border px-3 py-2 rounded" required>
+                            </div>
+
                         </div>
-                        <div class="mb-2">
-                            <label for="end_date" class="block text-sm font-semibold">Fecha de Fin:</label>
-                            <input type="date" name="end_date" id="end_date" class="w-full border px-3 py-2 rounded" required>
+
+
+
+
+
+
+
+
+        
+                        <div class="flex justify-end">
+                            <button type="button" onclick="closeModal()" class="mr-2 bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition">Cancelar</button>
+                            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">Guardar</button>
                         </div>
-                    </div>
-                    
-                    <div class="flex justify-end mt-4">
-                        <button type="button" onclick="closeModal()" class="mr-2 bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition">Cancelar</button>
-                        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">Guardar</button>
                     </div>
                 </form>
             </div>
         </div>
-    </div>
+        
     <script>
         function openModal() {
             document.getElementById('modal').classList.remove('hidden');

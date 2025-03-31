@@ -50,4 +50,8 @@ Route::get('/export-global-report', [AttendanceReportController::class, 'exportG
 Route::get('/export-individual-report/{intern}', [AttendanceReportController::class, 'exportIndividualReport'])->name('export.individual');
 
 
+
+
+
+
 require __DIR__.'/auth.php';

@@ -127,6 +127,12 @@ class InternController extends Controller
 {
     $intern->name = $request->name;
     $intern->lastname = $request->lastname;
+
+    $intern->turno = $request-> turno;
+    $intern->happy = $request-> happy;
+    $intern->espacialidad = $request-> espacialidad;
+
+
     $intern->dni = $request->dni;
     $intern->phone = $request->phone;
     $intern->arrival_time = $request->arrival_time;

@@ -69,16 +69,45 @@
                     class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-400">
             </div>
 
-            <!-- Botones -->
-            <div class="flex justify-between items-center mt-4">
-                <a href="{{ route('interns.index') }}" 
-                    class="px-4 py-2 bg-red-500 text-white font-semibold rounded-lg shadow hover:bg-red-600 transition duration-200">
-                    Cancelar
-                </a>
-
-                <!-- Botón Flux con type="submit" para que funcione el formulario -->
-                <flux:button type="submit" variant="primary">Actualizar</flux:button>
+            
             </div>
+            <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label for="turno" class="block text-sm font-semibold">Turno:</label>
+                                <select name="turno" id="turno" class="w-full border px-3 py-2 rounded">
+                                    <option value="">Seleccionar...</option>
+                                    <option value="M">Mañana</option>
+                                    <option value="T">Tarde</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="espacialidad" class="block text-sm font-semibold">Especialidad:</label>
+                                <select name="espacialidad" id="espacialidad" class="w-full border px-3 py-2 rounded">
+                                    <option value="">Seleccionar...</option>
+                                    <option value="P">Programacion</option>
+                                    <option value="S">Soporte</option>
+                                    <option value="R">Redes</option>
+                                </select>
+                            </div>
+                        </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label for="happy " class="block text-sm font-semibold">Fecha de Cumpleaños:</label>
+                    <input type="date" name="happy" id="happy" class="w-full border px-3 py-2 rounded" required>
+                </div>
+
+            </div>
+
+        <!-- Botones -->
+        <div class="flex justify-between items-center mt-4">
+            <a href="{{ route('interns.index') }}" 
+                class="px-4 py-2 bg-red-500 text-white font-semibold rounded-lg shadow hover:bg-red-600 transition duration-200">
+                Cancelar
+            </a>
+
+            <!-- Botón Flux con type="submit" para que funcione el formulario -->
+            <flux:button type="submit" variant="primary">Actualizar</flux:button>
 
         </form>
     </div>

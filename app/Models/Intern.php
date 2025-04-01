@@ -10,7 +10,6 @@ class Intern extends Model
     use HasFactory;
 
     protected $fillable = [
-        
         'name',
         'lastname',
         'turno',

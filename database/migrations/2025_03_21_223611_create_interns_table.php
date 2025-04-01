@@ -19,7 +19,7 @@ return new class extends Migration
 
             $table->enum('turno', ['M','T'])->nullable();
             $table->date('happy')->nullable();
-            $table->integer('active')->default(1);
+            $table->smallInteger('active')->default(1);
             $table->enum('espacialidad',['P','S','R'])->nullable();
             
             $table->string('dni', 8)->unique();
@@ -27,7 +27,7 @@ return new class extends Migration
             $table->time('arrival_time')->nullable();
             $table->time('departure_time'); // Hora de salida establecida
             $table->date('start_date'); // Inicio de prácticas
-            $table->date('end_date'); // Fin de prácticas
+            $table->date('end_date'); // Fin de active
             $table->string('institution')->nullable(); // Institución de procedencia
             $table->timestamps();
         });

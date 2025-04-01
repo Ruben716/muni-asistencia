@@ -63,10 +63,7 @@ class InternController extends Controller
 
         'turno' => 'required|string|max:50',
         'happy'=> 'required|date',
-        //el activate solucionar ya que no se puede guardar 
-        'active'=> 'required|int',
         'espacialidad'=> 'required|string|max:20',
-
         'dni' => 'required|string|size:8|unique:interns,dni',
         'phone' => 'nullable|string|size:9',
         'arrival_time' => 'required|date_format:H:i',
@@ -90,7 +87,7 @@ class InternController extends Controller
         ]);
 
         // Asignar el rol 'user'
-        $user->assignRole('user');
+        // $user->assignRole('user');
 
         // Guardar los datos en la sesión para mostrarlos en la vista
         return redirect()->route('interns.index')->with([

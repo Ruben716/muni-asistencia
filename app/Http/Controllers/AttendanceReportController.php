@@ -33,7 +33,7 @@ public function exportGlobalReport()
     // Cargar la vista para el PDF
     $pdf = Pdf::loadView('admin.attendances.global_report', compact('reportData'));
 
-    return $pdf->download('reporte_global_asistencias.pdf');
+    return $pdf->stream('reporte_global_asistencias.pdf');
 }
 
     public function exportIndividualReport($internId)

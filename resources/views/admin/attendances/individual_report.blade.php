@@ -12,8 +12,8 @@
 </head>
 <body>
     <div style="width: 100%; display: flex; justify-content: space-between; align-items: center;">
-        <img src="{{'imagen/COA_Puno.png'}}" width="100" align="left" >
-        <img src="{{'imagen/Logo-Puno-Renace.png'}}" width="100" align="right" >
+        <img src="{{'imagen/COA_Puno.png'}}" width="80" align="left" >
+        <img src="{{'imagen/Logo-Puno-Renace.png'}}" width="160" align="right" >
         
     </div>
    
@@ -25,15 +25,16 @@
         <h2 class="text-xl font-bold">
          MUNICIPALIDAD PROVINCIAL DE PUNO
         </h2>
+        
         <h3 class="text-lg">
          GERENCIA DE ADMINISTRACIÓN
         </h3>
         <h4 class="text-md">
          SUB GERENCIA DE PERSONAL
         </h4>
-        {{-- <p class="italic">
+        <p class="italic">
          "Año de la recuperación y consolidación de la economía peruana"
-        </p> --}}
+        </p>
         <hr>
         <h4 class="text-lg font-bold" style="text-decoration: underline;">
             HOJA DE CONTROL DE ASISTENCIA DE PRACTICANTE-2025

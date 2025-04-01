@@ -11,8 +11,15 @@
     </style>
 </head>
 <body>
+    <div style="width: 100%; display: flex; justify-content: space-between; align-items: center;">
+        <img src="{{'imagen/COA_Puno.png'}}" width="100" align="left" >
+        <img src="{{'imagen/Logo-Puno-Renace.png'}}" width="200" align="right" >
+        
+    </div>
     <h2 style="text-align: center;">Reporte Global de Asistencias</h2>
-    
+    <br>
+    <br>
+    <br>
     <table>
         <thead>
             <tr>

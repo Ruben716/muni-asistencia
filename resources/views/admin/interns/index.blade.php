@@ -436,7 +436,7 @@
 
                         <div class="grid grid-cols-2 gap-4">
                             <div>
-                                <label for="happy " class="block text-sm font-semibold">Fecha de Cumpleaños:</label>
+                                <label for="happy " class="block text-sm font-semibold">Fecha de nacimiento:</label>
                                 <input type="date" name="happy" id="happy" class="w-full border px-3 py-2 rounded" required>
                             </div>
 

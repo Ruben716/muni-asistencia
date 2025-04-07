@@ -89,31 +89,27 @@
 
         <!--  vista de todos los practicantes -->
         <div class="overflow-x-auto">
-            <table class="min-w-full bg-white border border-gray-300">
+            <table class="min-w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600">
                 <thead>
-                    <tr class="bg-gray-200">
-                        <th class="px-4 py-2 border">Nombre</th>
-                        <th class="px-4 py-2 border">Apellido</th>
-                        <th class="px-4 py-2 border">DNI</th>
-                        <th class="px-4 py-2 border">Acciones</th>
-                        
+                    <tr class="bg-gray-200 dark:bg-gray-700">
+                        <th class="px-4 py-2 border dark:border-gray-600">Nombre</th>
+                        <th class="px-4 py-2 border dark:border-gray-600">Apellido</th>
+                        <th class="px-4 py-2 border dark:border-gray-600">DNI</th>
+                        <th class="px-4 py-2 border dark:border-gray-600">Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($interns as $intern)
-                        <tr>
-                            <td class="px-4 py-2 border">{{ $intern->name }}</td>
-                            <td class="px-4 py-2 border">{{ $intern->lastname }}</td>
-                            <td class="px-4 py-2 border">{{ $intern->dni }}</td>
-                            <td class="px-4 py-2 border text-center">
+                        <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <td class="px-4 py-2 border dark:border-gray-600 dark:text-gray-100">{{ $intern->name }}</td>
+                            <td class="px-4 py-2 border dark:border-gray-600 dark:text-gray-100">{{ $intern->lastname }}</td>
+                            <td class="px-4 py-2 border dark:border-gray-600 dark:text-gray-100">{{ $intern->dni }}</td>
+                            <td class="px-4 py-2 border text-center dark:border-gray-600">
                                 <!-- Botón "Descargar Reporte Individual" -->
                                 <flux:button variant="filled" onclick="window.location='{{ route('export.individual', $intern->id) }}'">
                                     Descargar Reporte Individual
                                 </flux:button>
-                                {{-- <flux:button icon="arrow-down-tray"variant="filled" onclick="window.location='{{ route('export.individual', $intern->id) }}'">
-                                    Descargar Reporte Individual
-                                </flux:button> --}}
-        
+                                
                                 <!-- Botón "Ver más" -->
                                 <button onclick="openDetailModal({{ $intern->id }})" class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 transition">
                                     Ver más
@@ -124,6 +120,7 @@
                 </tbody>
             </table>
         </div>
+        
         
 
 <!-- Modal para los detalles completos del Practicante -->
@@ -353,71 +350,71 @@
             }
         </style>
         
-        {{-- nodal para que crear un usuario 
-         --}}
-         {{-- <div id="modal" class="hidden fixed inset-0 bg-gray-200 bg-opacity-150 dark:bg-opacity-50 dark:backdrop-blur-md flex justify-center items-center"> --}}
-            <div id="modal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-80 backdrop-blur-lg flex justify-center items-center">
-
-         {{-- <div id="modal" class="hidden fixed inset-0 dark:bg-gray-900 bg-opacity-50 flex justify-center items-center"> --}}
-            <div class="bg-white p-6 rounded-lg shadow-lg w-1/3">
+        <div id="modal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-80 backdrop-blur-md flex justify-center items-center">
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg w-1/3 text-gray-900 dark:text-gray-100">
                 <h2 class="text-xl font-bold mb-4">Agregar Practicante</h2>
                 <form action="{{ route('interns.store') }}" method="POST">
                     @csrf
                     <div class="flex flex-col space-y-4">
+                        <!-- Nombre y Apellido -->
                         <div class="grid grid-cols-2 gap-4">
                             <div>
                                 <label for="name" class="block text-sm font-semibold">Nombre:</label>
-                                <input type="text" name="name" id="name" class="w-full border px-3 py-2 rounded" autocomplete="given-name" required>
+                                <input type="text" name="name" id="name" class="w-full border px-3 py-2 rounded dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100" autocomplete="given-name" required>
                             </div>
                             <div>
                                 <label for="lastname" class="block text-sm font-semibold">Apellido:</label>
-                                <input type="text" name="lastname" id="lastname" class="w-full border px-3 py-2 rounded" autocomplete="family-name" required>
+                                <input type="text" name="lastname" id="lastname" class="w-full border px-3 py-2 rounded dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100" autocomplete="family-name" required>
                             </div>
                         </div>
         
+                        <!-- DNI y Teléfono -->
                         <div class="grid grid-cols-2 gap-4">
                             <div>
                                 <label for="dni" class="block text-sm font-semibold">DNI:</label>
-                                <input type="text" name="dni" id="dni" class="w-full border px-3 py-2 rounded" pattern="\d{8}" title="Debe contener 8 dígitos" autocomplete="off" required>
+                                <input type="text" name="dni" id="dni" class="w-full border px-3 py-2 rounded dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100" pattern="\d{8}" title="Debe contener 8 dígitos" autocomplete="off" required>
                             </div>
                             <div>
                                 <label for="phone" class="block text-sm font-semibold">Teléfono:</label>
-                                <input type="text" name="phone" id="phone" class="w-full border px-3 py-2 rounded" pattern="\d{9}" title="Debe contener 9 dígitos" autocomplete="tel">
+                                <input type="text" name="phone" id="phone" class="w-full border px-3 py-2 rounded dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100" pattern="\d{9}" title="Debe contener 9 dígitos" autocomplete="tel">
                             </div>
                         </div>
         
+                        <!-- Institución -->
                         <div>
                             <label for="institution" class="block text-sm font-semibold">Institución:</label>
-                            <input type="text" name="institution" id="institution" class="w-full border px-3 py-2 rounded" autocomplete="organization" required>
+                            <input type="text" name="institution" id="institution" class="w-full border px-3 py-2 rounded dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100" autocomplete="organization" required>
                         </div>
         
+                        <!-- Hora de Llegada y Salida -->
                         <div class="grid grid-cols-2 gap-4">
                             <div>
                                 <label for="arrival_time" class="block text-sm font-semibold">Hora de Llegada:</label>
-                                <input type="time" name="arrival_time" id="arrival_time" class="w-full border px-3 py-2 rounded" required>
+                                <input type="time" name="arrival_time" id="arrival_time" class="w-full border px-3 py-2 rounded dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100" required>
                             </div>
                             <div>
                                 <label for="departure_time" class="block text-sm font-semibold">Hora de Salida:</label>
-                                <input type="time" name="departure_time" id="departure_time" class="w-full border px-3 py-2 rounded" required>
+                                <input type="time" name="departure_time" id="departure_time" class="w-full border px-3 py-2 rounded dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100" required>
                             </div>
                         </div>
         
+                        <!-- Fecha de Inicio y Fin -->
                         <div class="grid grid-cols-2 gap-4">
                             <div>
                                 <label for="start_date" class="block text-sm font-semibold">Fecha de Inicio:</label>
-                                <input type="date" name="start_date" id="start_date" class="w-full border px-3 py-2 rounded" required>
+                                <input type="date" name="start_date" id="start_date" class="w-full border px-3 py-2 rounded dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100" required>
                             </div>
                             <div>
                                 <label for="end_date" class="block text-sm font-semibold">Fecha de Fin:</label>
-                                <input type="date" name="end_date" id="end_date" class="w-full border px-3 py-2 rounded" required>
+                                <input type="date" name="end_date" id="end_date" class="w-full border px-3 py-2 rounded dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100" required>
                             </div>
                         </div>
         
-                        <!-- NUEVOS CAMPOS -->
+                        <!-- Nuevos Campos: Turno y Especialidad -->
                         <div class="grid grid-cols-2 gap-4">
                             <div>
                                 <label for="turno" class="block text-sm font-semibold">Turno:</label>
-                                <select name="turno" id="turno" class="w-full border px-3 py-2 rounded">
+                                <select name="turno" id="turno" class="w-full border px-3 py-2 rounded dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100">
                                     <option value="">Seleccionar...</option>
                                     <option value="M">Mañana</option>
                                     <option value="T">Tarde</option>
@@ -425,7 +422,7 @@
                             </div>
                             <div>
                                 <label for="espacialidad" class="block text-sm font-semibold">Especialidad:</label>
-                                <select name="espacialidad" id="espacialidad" class="w-full border px-3 py-2 rounded">
+                                <select name="espacialidad" id="espacialidad" class="w-full border px-3 py-2 rounded dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100">
                                     <option value="">Seleccionar...</option>
                                     <option value="P">Programacion</option>
                                     <option value="S">Soporte</option>
@@ -433,23 +430,16 @@
                                 </select>
                             </div>
                         </div>
-
+        
+                        <!-- Fecha de Nacimiento -->
                         <div class="grid grid-cols-2 gap-4">
                             <div>
-                                <label for="happy " class="block text-sm font-semibold">Fecha de nacimiento:</label>
-                                <input type="date" name="happy" id="happy" class="w-full border px-3 py-2 rounded" required>
+                                <label for="happy" class="block text-sm font-semibold">Fecha de Nacimiento:</label>
+                                <input type="date" name="happy" id="happy" class="w-full border px-3 py-2 rounded dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100" required>
                             </div>
-
                         </div>
-
-
-
-
-
-
-
-
         
+                        <!-- Botones -->
                         <div class="flex justify-end">
                             <button type="button" onclick="closeModal()" class="mr-2 bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition">Cancelar</button>
                             <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">Guardar</button>
@@ -458,6 +448,7 @@
                 </form>
             </div>
         </div>
+        
         
     <script>
         function openModal() {

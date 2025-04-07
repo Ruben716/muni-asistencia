@@ -5,6 +5,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use App\Models\Intern;
 use App\Models\Attendance;
+use Carbon\Carbon;
 
 
 
@@ -36,41 +37,71 @@ public function exportGlobalReport()
     return $pdf->stream('reporte_global_asistencias.pdf');
 }
 
-    public function exportIndividualReport($internId)
-    {
-        $intern = Intern::find($internId);
-            
-        // Obtener fechas hábiles
-        $startDate = $intern->start_date;
-        $endDate = $intern->end_date;
-        $allDates = collect();
-        
-        for ($date = $startDate; $date <= $endDate; $date = date('Y-m-d', strtotime($date . ' +1 day'))) {
-            if (!in_array(date('N', strtotime($date)), [6, 7])) { // Excluir sábados (6) y domingos (7)
-                $allDates->push($date);
+public function exportIndividualReport($internId)
+{
+    $intern = Intern::find($internId);
+    if (!$intern) {
+        // Manejo de error si el practicante no existe
+        return response()->json(['error' => 'Intern not found'], 404);
+    }
+
+    // Asegurarnos de que las fechas son objetos Carbon
+    $startDate = Carbon::parse($intern->start_date);
+    $endDate = Carbon::parse($intern->end_date);
+    $today = Carbon::now();  // Obtener la fecha actual
+    
+    // Filtrar solo días hábiles
+    $allDates = collect();
+    for ($date = $startDate; $date <= $endDate; $date->addDay()) {
+        if (!in_array($date->dayOfWeek, [6, 0])) { // Excluir sábados y domingos
+            $allDates->push($date->format('Y-m-d'));
+        }
+    }
+
+    // Mapear los datos de asistencia
+    $reportData = $allDates->map(function ($date) use ($intern, $today) {
+        $attendance = $intern->attendances()->where('date', $date)->first();
+
+        // Si la fecha es anterior a hoy
+        if (Carbon::parse($date)->lt($today)) {
+            if ($attendance) {
+                $checkInTime = Carbon::parse($attendance->check_in);
+                $checkOutTime = Carbon::parse($attendance->check_out);
+                $expectedTime = Carbon::parse($intern->expected_start_time);
+                
+                // Comparar si la hora de entrada es después de la hora esperada
+                if ($checkInTime->gt($expectedTime)) {
+                    $status = 'Tarde';
+                } else {
+                    $status = 'Presente';
+                }
+                $checkInTime = $checkInTime->format('H:i');  // Solo mostrar la hora
+                $checkOutTime = $checkOutTime->format('H:i'); // Solo mostrar la hora
+            } else {
+                $status = 'Ausente';
+                $checkInTime = 'N/A'; // No hubo registro de hora de entrada
+                $checkOutTime = 'N/A'; // No hubo registro de hora de salida
             }
+        } else {
+            // Si la fecha es en el futuro, dejar en blanco
+            $status = '';
+            $checkInTime = '';
+            $checkOutTime = '';
         }
 
-        // Construir reporte
-        // Construir reporte
-        $reportData = $allDates->map(function ($date) use ($intern) {
-        $attendance = $intern->attendances->where('date', $date)->first();
-
         return [
-                'date' => $date,
-                'status' => $attendance
-                    ? ($attendance->is_late ? 'Tarde' : 'Presente')
-                    : 'Ausente',
-                'check_in' => $attendance?->check_in ?? 'N/A',
-                'check_out' => $attendance?->check_out ?? 'N/A',
-    ];
-});
+            'date' => $date,
+            'status' => $status,
+            'check_in' => $checkInTime ?? 'N/A',
+            'check_out' => $checkOutTime ?? 'N/A',
+        ];
+    });
 
+    // Generar el PDF con los datos
+    $pdf = Pdf::loadView('admin.attendances.individual_report', compact('intern', 'reportData'));
 
-        $pdf = Pdf::loadView('admin.attendances.individual_report', compact('intern', 'reportData'));
-
-        return $pdf->stream('reporte_individual_asistencias.pdf');
-    } 
+    return $pdf->stream('reporte_individual_asistencias.pdf');
+}
 
 
 }

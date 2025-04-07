@@ -41,7 +41,17 @@ Route::middleware(['auth' ])->group(function () {
 
 // Rutas accesibles tanto para ADMIN como para USER
 Route::middleware(['auth'])->group(function () {
-    Route::resource('attendances', AttendanceController::class);
+    Route::resource('attendances', AttendanceController::class)
+    ->names([
+        'index' => 'attendances.index',  // Asigna el nombre 'attendances.index' a la ruta index
+        'create' => 'attendances.create',
+        'store' => 'attendances.store',
+        'show' => 'attendances.show',
+        'edit' => 'attendances.edit',
+        'update' => 'attendances.update',
+        'destroy' => 'attendances.destroy',
+    ]);
+
     Route::get('/attendance/export', [AttendanceHistoryController::class, 'export'])->name('attendance.export');
     Route::get('/historial-asistencias', [AttendanceHistoryController::class, 'index'])->name('historial-asistencias.index');
 });

@@ -50,6 +50,7 @@
 
             @foreach($groups as $group => $links)
             <flux:navlist.group :heading="$group" class="grid">
+                
                 @foreach($links as $link)
                     <flux:navlist.item 
                         :icon="$link['icon'] ?? 'default-icon'" 

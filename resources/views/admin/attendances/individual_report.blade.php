@@ -32,6 +32,7 @@
             border-collapse: collapse;
         }
         .asistencia-table th,
+
         .asistencia-table td {
             border: 1px solid #000;
             padding: 6px;
@@ -50,23 +51,57 @@
             border-top: 1px solid #ccc;
             padding-top: 10px;
         }
+
+
+        .container {
+            width: 110%;
+            border-collapse: collapse;
+        }
+        .container td {
+            vertical-align: middle;
+            text-align: center;
+        }
+        .header-image {
+            width: 60px;
+        }
+        .header-image-right {
+            width: 100px;
+        }
+        .text-center {
+            text-align: center;
+        }
+        .underline {
+            text-decoration: underline;
+        }
+        .left-image-cell {
+            width: 100%; 
+        }
+
+
+
     </style>
 </head>
 <body>
 
-    
-        <img src="{{'imagen/COA_Puno.png'}}" width="60" align="left" >
-        <img src="{{'imagen/Logo-Puno-Renace.png'}}" width="140" align="right" >
-    
-
-    <div class="text-center">
-        <h2>MUNICIPALIDAD PROVINCIAL DE PUNO</h2>
-        <h3>GERENCIA DE ADMINISTRACIÓN</h3>
-        <h4>SUB GERENCIA DE PERSONAL</h4>
-        <p><em>"Año de la recuperación y consolidación de la economía peruana"</em></p>
-        <hr>
-        <h4 style="text-decoration: underline;">HOJA DE CONTROL DE ASISTENCIA DE PRACTICANTE - 2025</h4>
+ 
+    <table class="container">
+        <tr>
+            <td><img src="{{'imagen/COA_Puno (1).png'}}" class="header-image" align="right"></td>
+            <td>
+                <h2 class="text-center">                 MUNICIPALIDAD PROVINCIAL DE PUNO</h2>
+                <h3 class="text-center">GERENCIA DE ADMINISTRACIÓN</h3>
+                <h4 class="text-center">SUB GERENCIA DE PERSONAL</h4>
+            </td>
+            <td><img src="{{'imagen/OTI_logo.png'}}" class="header-image-right" align="left"></td>
+        </tr>
+    </table>
+       
     </div>
+    <p class="text-center"><em>"Año de la recuperación y consolidación de la economía peruana"</em></p>
+    <hr>
+
+    <h4 class="text-center" style="text-decoration: underline;">HOJA DE CONTROL DE ASISTENCIA DE PRACTICANTE - 2025</h4>
+
 
     <div class="datos-principal">
         <table>

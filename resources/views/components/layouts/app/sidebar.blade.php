@@ -1,34 +1,30 @@
 
 @php
+    $user = auth()->user();
+
     $groups = [
-        'Control' => [
-            // [
-            //     'name' => 'Control de  asistencias',
-            //     'icon' => 'book-open',
-            //     'url'  => route('dashboard'),
-            //     'current' => request()->routeIs('dashboard')
-            // ],
-            [
+        'Control' => array_filter([
+            $user->hasRole('admin') ? [
                 'name' => 'Practicantes',
                 'icon' => 'book-open',
                 'url'  => route('interns.index'),
                 'current' => request()->routeIs('interns.index')
-            ],
+            ] : null,
+
             [
                 'name' => 'Registra tu asistencia',
                 'icon' => 'book-open',
                 'url'  => route('attendances.index'),
                 'current' => request()->routeIs('attendances.index')
             ],
-            [
-                'name' => 'historial de asistencias',
+
+            $user->hasRole('admin') ? [
+                'name' => 'Historial de asistencias',
                 'icon' => 'book-open',
                 'url'  => route('historial-asistencias.index'),
                 'current' => request()->routeIs('historial-asistencias.index')
-            ],
-            
-
-        ]
+            ] : null,
+        ])
     ];
 @endphp
 

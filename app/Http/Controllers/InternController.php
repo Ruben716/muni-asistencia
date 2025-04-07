@@ -87,7 +87,7 @@ class InternController extends Controller
         ]);
 
         // Asignar el rol 'user'
-        // $user->assignRole('user');
+        $user->assignRole('user');
 
         // Guardar los datos en la sesión para mostrarlos en la vista
         return redirect()->route('interns.index')->with([

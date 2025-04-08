@@ -376,7 +376,7 @@
                             </div>
                             <div>
                                 <label for="phone" class="block text-sm font-semibold">Teléfono:</label>
-                                <input type="text" name="phone" id="phone" class="w-full border px-3 py-2 rounded dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100" pattern="\d{9}" title="Debe contener 9 dígitos" autocomplete="tel">
+                                <input type="text" name="phone" id="phone" class="w-full border px-3 py-2 rounded dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100" pattern="\d{9}"  >
                             </div>
                         </div>
         
@@ -457,5 +457,73 @@
         function closeModal() {
             document.getElementById('modal').classList.add('hidden');
         }
+
+
+
+        function onlyNumbers(event) {
+        const key = event.key;
+        // Si la tecla no es un número ni una tecla de control, previene la acción
+        if (!/^\d$/.test(key) && key !== 'Backspace' && key !== 'Delete' && key !== 'Tab') {
+            event.preventDefault();
+        }
+    }
+
+    // Función para limitar la cantidad de caracteres en los campos
+    function limitLength(input, maxLength) {
+        if (input.value.length >= maxLength) {
+            // Evita que el input reciba más caracteres
+            input.value = input.value.slice(0, maxLength);
+        }
+    }
+
+    // Aplicar la validación de números y limitar la longitud de los campos DNI y Teléfono
+    document.addEventListener('DOMContentLoaded', function() {
+        const dniInput = document.getElementById('dni');
+        const phoneInput = document.getElementById('phone');
+
+        // Agregar la validación para solo números en los inputs
+        if (dniInput) dniInput.addEventListener('keydown', onlyNumbers);
+        if (phoneInput) phoneInput.addEventListener('keydown', onlyNumbers);
+
+        // Limitar la longitud de los campos cuando el usuario escribe
+        if (dniInput) {
+            dniInput.addEventListener('input', function() {
+                limitLength(dniInput, 8);  // Limitar a 8 dígitos para DNI
+            });
+        }
+
+        if (phoneInput) {
+            phoneInput.addEventListener('input', function() {
+                limitLength(phoneInput, 9);  // Limitar a 9 dígitos para Teléfono
+            });
+        }
+
+        // Validación de longitud de los campos DNI y Teléfono al enviar el formulario
+        const form = document.querySelector('form');
+        form.addEventListener('submit', function(event) {
+            let isValid = true;
+            // Validar que el DNI tenga 8 dígitos
+            if (dniInput && dniInput.value.length !== 8) {
+                alert("El DNI debe tener exactamente 8 dígitos.");
+                isValid = false;
+            }
+            // Validar que el Teléfono tenga 9 dígitos
+            if (phoneInput && phoneInput.value.length !== 9) {
+                alert("El Teléfono debe tener exactamente 9 dígitos.");
+                isValid = false;
+            }
+
+            // Si la validación falla, no enviar el formulario
+            if (!isValid) {
+                event.preventDefault();
+            }
+        });
+    });
+
+
+
+
+
+
     </script>
 </x-layouts.app>

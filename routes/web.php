@@ -14,8 +14,9 @@ use App\Http\Controllers\AttendanceReportController;
 
 
 Route::get('/', function () {
-    return view('welcome');
-})->name('home');
+    return redirect()->route('login');
+})->name('home');  // 👈 le das el nombre 'home' para que no reviente
+
 
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])

@@ -29,7 +29,7 @@ class AttendanceController extends Controller
             $attendances = Attendance::with('intern')
                 ->whereBetween('date', [$startOfWeek, $endOfWeek])
                 ->orderBy('date', 'desc')
-                ->paginate(10); // Paginación de 10 registros por página
+                ->paginate(10); // regist
         } elseif ($filter == 'month') {
             // Obtener el inicio y fin del mes
             $startOfMonth = $today->startOfMonth();

@@ -57,4 +57,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/historial-asistencias', [AttendanceHistoryController::class, 'index'])->name('historial-asistencias.index');
 });
 
+
+Route::post('/reporte-individual/{internId}', [AttendanceReportController::class, 'exportIndividualReport']);
+
+
 require __DIR__.'/auth.php';        

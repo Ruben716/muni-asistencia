@@ -10,6 +10,6 @@ class InternSeeder extends Seeder
     public function run()
     {
         // Crear 100 practicantes
-        // Intern::factory(100)->create();
+        Intern::factory(100)->create();
     }
 }

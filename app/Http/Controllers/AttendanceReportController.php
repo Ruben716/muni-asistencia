@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Intern;
 use App\Models\Attendance;
 use Carbon\Carbon;
+use App\Services\Kafka\ProducerService;
+
 
 
 
@@ -37,70 +39,69 @@ public function exportGlobalReport()
     return $pdf->stream('reporte_global_asistencias.pdf');
 }
 
-public function exportIndividualReport($internId)
+public function exportIndividualReport($internId, ProducerService $producer)
 {
-    $intern = Intern::find($internId);
+    $intern = Intern::with('attendances')->find($internId);
+
     if (!$intern) {
-        // Manejo de error si el practicante no existe
-        return response()->json(['error' => 'Intern not found'], 404);
+        return response()->json(['error' => 'Intern no encontrado'], 404);
     }
 
-    // Asegurarnos de que las fechas son objetos Carbon
-    $startDate = Carbon::parse($intern->start_date);
-    $endDate = Carbon::parse($intern->end_date);
-    $today = Carbon::now();  // Obtener la fecha actual
-    
-    // Filtrar solo días hábiles
-    $allDates = collect();
-    for ($date = $startDate; $date <= $endDate; $date->addDay()) {
-        if (!in_array($date->dayOfWeek, [6, 0])) { // Excluir sábados y domingos
-            $allDates->push($date->format('Y-m-d'));
-        }
-    }
+    // Convertir fechas a instancias Carbon seguras
+    $startDate = \Carbon\Carbon::parse($intern->start_date);
+    $endDate   = \Carbon\Carbon::parse($intern->end_date);
+    $today     = \Carbon\Carbon::now();
 
-    // Mapear los datos de asistencia
-    $reportData = $allDates->map(function ($date) use ($intern, $today) {
-        $attendance = $intern->attendances()->where('date', $date)->first();
+    // Generar listado de días laborables con asistencia
+    $reportData = collect();
+    for ($date = $startDate->copy(); $date <= $endDate; $date->addDay()) {
+        if (!in_array($date->dayOfWeek, [6, 0])) { // Excluye sábado (6) y domingo (0)
+            $attendance = $intern->attendances->firstWhere('date', $date->toDateString());
 
-        // Si la fecha es anterior a hoy
-        if (Carbon::parse($date)->lt($today)) {
-            if ($attendance) {
-                $checkInTime = Carbon::parse($attendance->check_in);
-                $checkOutTime = Carbon::parse($attendance->check_out);
-                $expectedTime = Carbon::parse($intern->expected_start_time);
-                
-                // Comparar si la hora de entrada es después de la hora esperada
-                if ($checkInTime->gt($expectedTime)) {
-                    $status = 'Tarde';
+            if ($date->lt($today)) {
+                if ($attendance) {
+                    $checkIn  = $attendance->check_in ? \Carbon\Carbon::parse($attendance->check_in)->format('H:i') : 'N/A';
+                    $checkOut = $attendance->check_out ? \Carbon\Carbon::parse($attendance->check_out)->format('H:i') : 'N/A';
+                    $status   = 'Sí';
                 } else {
-                    $status = 'Presente';
+                    $checkIn = $checkOut = 'N/A';
+                    $status = 'No';
                 }
-                $checkInTime = $checkInTime->format('H:i');  // Solo mostrar la hora
-                $checkOutTime = $checkOutTime->format('H:i'); // Solo mostrar la hora
             } else {
-                $status = 'Ausente';
-                $checkInTime = 'N/A'; // No hubo registro de hora de entrada
-                $checkOutTime = 'N/A'; // No hubo registro de hora de salida
+                $checkIn = $checkOut = $status = '';
             }
-        } else {
-            // Si la fecha es en el futuro, dejar en blanco
-            $status = '';
-            $checkInTime = '';
-            $checkOutTime = '';
+
+            $reportData->push([
+                'date'      => $date->format('Y-m-d'),
+                'check_in'  => $checkIn,
+                'check_out' => $checkOut,
+                'status'    => $status,
+            ]);
         }
+    }
 
-        return [
-            'date' => $date,
-            'status' => $status,
-            'check_in' => $checkInTime ?? 'N/A',
-            'check_out' => $checkOutTime ?? 'N/A',
-        ];
-    });
+    // ✅ Estructura final del payload para Kafka
+    $payload = [
+        'id_plantilla' => 4,
+        'datos' => [
+            'intern' => [
+                'name'       => $intern->name,
+                'lastname'   => $intern->lastname,
+                'start_date' => $startDate->format('Y-m-d'),
+                'end_date'   => $endDate->format('Y-m-d'),
+            ],
+            'reportData' => $reportData->toArray(),
+        ]
+    ];
 
-    // Generar el PDF con los datos
-    $pdf = Pdf::loadView('admin.attendances.individual_report', compact('intern', 'reportData'));
+    // Enviar por Kafka
+    $reporte = $producer->enviarSolicitudIndividual($internId, $payload);
 
-    return $pdf->stream('reporte_individual_asistencias.pdf');
+    return response()->json([
+        'mensaje'    => 'Solicitud enviada correctamente',
+        'reporte_id' => $reporte->id,
+        'estado'     => $reporte->estado,
+    ]);
 }
 
 

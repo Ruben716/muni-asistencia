@@ -1,0 +1,58 @@
+version: "3.9"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: laravel-asistencias
+    volumes:
+      - ./:/var/www/html
+    ports:
+      - "8001:8000"  # Laravel sirve en 8000 dentro, se expone en 8001 afuera
+    environment:
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_DATABASE=asistencias
+      - DB_USERNAME=root
+      - DB_PASSWORD=root
+      - KAFKA_BROKERS=kafka:29092
+      - KAFKA_TOPIC_SOLICITUDES=reportes.solicitudes
+      - KAFKA_TOPIC_RESPUESTAS=reportes.respuestas
+    depends_on:
+      - mysql
+    networks:
+      - red-kafka-global
+
+  consumer:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: laravel-asistencias-consumer
+    command: php artisan kafka:consume-respuestas
+    volumes:
+      - ./:/var/www/html
+    depends_on:
+      - mysql
+    networks:
+      - red-kafka-global
+
+  mysql:
+    image: mysql:8
+    container_name: mysql-asistencias
+    environment:
+      MYSQL_DATABASE: asistencias
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - red-kafka-global
+
+volumes:
+  mysql-data:
+
+networks:
+  red-kafka-global:
+    external: true

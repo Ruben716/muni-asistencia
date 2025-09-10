@@ -31,7 +31,6 @@ return new class extends Migration
             $table->string('institution')->nullable(); // Institución de procedencia
             $table->timestamps();
         });
-        //se agrego tres campos que son para el turno cunpleaños y la descripcion para ver a que se dedica 
     }
     
 
